@@ -186,6 +186,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .nano-input-wrap .nano-wc.warn{color:#e74c3c}
 .nano-input-wrap button{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:10px 14px;font-size:14px;cursor:pointer;transition:.2s;flex-shrink:0}
 .nano-input-wrap button:active{transform:scale(.96)}
+.nano-demo{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border:1px solid var(--border);border-radius:10px;background:var(--surface);font-size:9px;cursor:pointer;color:var(--muted);margin-bottom:6px;transition:.2s}
+.nano-demo:hover{border-color:var(--accent);color:var(--accent)}
+.nano-demo.playing{background:var(--accent);color:#fff;border-color:var(--accent)}
+.nano-demo-status{font-size:9px;color:var(--muted);margin-left:6px;display:inline}
 
 /* ===== ONBOARDING / HELP ===== */
 .onboard-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:24px}
@@ -343,8 +347,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     </div>
 
     <div class="panel" id="panelNano">
-      <input class="nano-search" id="nanoSearch" placeholder="🔍 search nano notes..." autocomplete="off">
-      <div class="nano-list" id="nanoList"></div>
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">
+        <input class="nano-search" id="nanoSearch" placeholder="🔍 search nano notes..." autocomplete="off" style="margin-bottom:0;flex:1">
+        <button class="nano-demo" id="nanoDemo">▶ demo</button>
+      </div>
+      <div class="nano-list" id="nanoList">
+        <div class="empty-state"><span class="empty-icon">💬</span>tiny notes go here</div>
+      </div>
       <div class="nano-input-wrap">
         <div class="nano-row">
           <input id="nanoInput" placeholder="short note (3-5 words) ..." autocomplete="off">
@@ -770,6 +779,7 @@ document.getElementById('sprintTomorrow').addEventListener('click', () => { spri
 document.getElementById('sprintSearch').addEventListener('input', () => renderSprints());
 
 // ===== NANO NOTES =====
+let nanoDemoTimer=null,nanoDemoStep=0
 function renderNano(){
   const list=document.getElementById('nanoList'),q=document.getElementById('nanoSearch').value.toLowerCase().trim();
   let notes=state.nano||[];
@@ -784,21 +794,44 @@ function renderNano(){
   list.querySelectorAll('.nano-item').forEach(el=>{el.addEventListener('click',e=>{if(e.target.closest('.nano-del'))return;el.classList.toggle('expanded')})});
   list.querySelectorAll('.nano-del').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();state.nano=state.nano.filter(x=>x.id!==b.dataset.id);saveState();renderNano()}));
 }
-function submitNano(){
-  const i=document.getElementById('nanoInput'),t=i.value.trim();
-  if(!t)return;
+function submitNano(t){
+  const i=document.getElementById('nanoInput');
+  const raw=(t||i.value).trim();
+  if(!raw)return;
+  const words=raw.split(/\s+/);
+  if(words.length>5){showHint('max 5 words');return}
   state.nano=state.nano||[];
-  state.nano.push({id:uid(),text:t,timestamp:Date.now()});
-  saveState();i.value='';renderNano();document.getElementById('nanoWc').textContent='0';showHint('nano ✓')
+  state.nano.push({id:uid(),text:raw,timestamp:Date.now()});
+  saveState();if(!t){i.value='';document.getElementById('nanoWc').textContent='0'}renderNano();showHint('nano ✓')
 }
-document.getElementById('nanoSubmit').addEventListener('click',submitNano);
+document.getElementById('nanoSubmit').addEventListener('click',()=>submitNano());
 document.getElementById('nanoInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitNano()}});
 document.getElementById('nanoInput').addEventListener('input',function(){
   const wc=this.value.trim()?this.value.trim().split(/\s+/).length:0;
   const el=document.getElementById('nanoWc');el.textContent=wc;
-  el.classList.toggle('warn',wc>5);
+  if(wc>5){el.classList.add('warn');this.style.borderColor='#e74c3c'}else{el.classList.remove('warn');this.style.borderColor=''}
 });
 document.getElementById('nanoSearch').addEventListener('input',()=>renderNano());
+document.getElementById('nanoDemo').addEventListener('click',()=>{
+  const btn=document.getElementById('nanoDemo');
+  if(nanoDemoTimer){clearTimeout(nanoDemoTimer);nanoDemoTimer=null;btn.textContent='▶ demo';btn.classList.remove('playing');state.nano=(state.nano||[]).filter(n=>!n._demo);saveState();renderNano();return}
+  btn.textContent='⏹ stop';btn.classList.add('playing');
+  const demos=[{t:'Morning pages done'},{t:'Walk in park'},{t:'Call doctor'}];nanoDemoStep=0;
+  state.nano=(state.nano||[]).filter(n=>!n._demo);
+  function nextDemo(){
+    if(nanoDemoStep>=demos.length){
+      showHint('demo complete ✓');
+      btn.textContent='▶ replay';btn.classList.remove('playing');nanoDemoTimer=null;
+      return
+    }
+    const d=demos[nanoDemoStep];
+    state.nano.push({id:uid(),text:d.t,_demo:true,timestamp:Date.now()});saveState();renderNano();
+    showHint('➕ '+d.t);
+    nanoDemoStep++;
+    nanoDemoTimer=setTimeout(nextDemo,900);
+  }
+  nextDemo();
+});
 
 // ===== ONBOARDING =====
 const obSteps=[{icon:'🧠',title:'welcome to your journal',desc:'Structure, flexibility, and instant feedback — all in one place.'},{icon:'📝',title:'journal',desc:'Write what you\'re doing as you do it. One entry per activity.'},{icon:'📌',title:'sticky notes',desc:'Pin your thoughts. Drag by the ⋯⋯ handle. Tap 🎨 for colors.'},{icon:'🧠',title:'brain dump',desc:'Unfiltered capture. Type + Enter saves one thought.'},{icon:'⏰',title:'timeblocks',desc:'Schedule on a timeline. Day, 3-Day, Week, or Month view.'},{icon:'🍅',title:'pomodoro timer',desc:'25 work / 5 break. Runs all day automatically.'},{icon:'🏃',title:'sprint board',desc:'4 sprints per day. Assign one task per 2-hour block. Swap tasks by dragging.'},{icon:'💬',title:'nano notes',desc:'3-5 words per note. Tap to expand. Quick capture.'}]
