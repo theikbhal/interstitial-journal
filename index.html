@@ -570,8 +570,7 @@ if(e.key==='1'){switchTab(0);return}if(e.key==='2'){switchTab(1);return}if(e.key
 if(e.key==='7'){switchTab(6);return}
 if(e.key==='n'||e.key==='N'){if(currentTab===5){addGraphNode(80+Math.random()*120,40+Math.random()*100);showHint('node added');return}}
 if(e.key==='e'||e.key==='E'){if(currentTab===5){graphEdgeMode=!graphEdgeMode;document.getElementById('graphModeGraph').textContent=graphEdgeMode?'🔗 edge: ON':'🌐 graph';showHint(graphEdgeMode?'edge mode: click source then target':'edge mode off');return}}
-if((e.key==='Delete'||e.key==='Backspace')&&currentTab===5){deleteSelected();e.preventDefault();return}
-if(e.key==='Delete'||e.key==='Backspace'){if(currentTab===5&&graphSelected){deleteSelected();return}}
+if((e.key==='Delete'||e.key==='Backspace')&&currentTab===5&&graphSelected&&!e.target.closest('[contenteditable]')){deleteSelected();e.preventDefault();return}
 if(e.key==='Enter'&&!e.shiftKey){if(currentTab===0&&document.activeElement===document.getElementById('journalInput')){e.preventDefault();submitJournal()}if(currentTab===2&&document.activeElement===document.getElementById('dumpInput')){e.preventDefault();submitDump()}if(currentTab===4&&document.activeElement===document.getElementById('pomoNoteInput')){e.preventDefault();submitPomoNote()}}})
 
 // ===== JOURNAL =====
@@ -820,7 +819,7 @@ document.getElementById('sprintSearch').addEventListener('input', () => renderSp
 
 // ===== GRAPH / NODE EDITOR =====
 let graphSelected=null,graphEdgeMode=false,graphConnecting=null,graphCtxTarget=null,graphCtxType=null,graphNodeEls={}
-function initGraph(){if(!state.graph)state.graph={nodes:[],edges:[],viewMode:'graph'}}
+function initGraph(){if(!state.graph||!Array.isArray(state.graph.nodes))state.graph={nodes:[],edges:[],viewMode:'graph'}}
 
 function renderGraph(){initGraph();const layer=document.getElementById('graphNodesLayer'),svg=document.getElementById('graphSvg'),canvas=document.getElementById('graphCanvas')
 svg.innerHTML='';layer.innerHTML='';graphNodeEls={}
