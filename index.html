@@ -6,8 +6,8 @@
 <title>interstitial journal</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#faf8f5;--surface:#fff;--text:#1a1a2e;--muted:#888;--accent:#4a90d9;--accent-light:#e8f0fe;--border:#e8e6e1;--shadow:0 2px 12px rgba(0,0,0,.06);--radius:14px;--hour-h:56px;--work:#e74c3c;--break:#2ecc71;--node-bg:#fff;--node-border:#ddd;--graph-bg:#f0ede8;--hover:rgba(0,0,0,.04)}
-.night{--bg:#141420;--surface:#1e1e30;--text:#e0dce8;--muted:#7870a0;--accent:#6a9cf5;--accent-light:#2a2a44;--border:#2e2e44;--shadow:0 2px 12px rgba(0,0,0,.25);--node-bg:#282840;--node-border:#3e3e58;--graph-bg:#181828;--hover:rgba(255,255,255,.06)}
+:root{--bg:#faf8f5;--surface:#fff;--text:#1a1a2e;--muted:#888;--accent:#4a90d9;--accent-light:#e8f0fe;--border:#e8e6e1;--shadow:0 2px 12px rgba(0,0,0,.06);--radius:14px;--hour-h:56px;--work:#e74c3c;--break:#2ecc71;--hover:rgba(0,0,0,.04)}
+10: .night{--bg:#141420;--surface:#1e1e30;--text:#e0dce8;--muted:#7870a0;--accent:#6a9cf5;--accent-light:#2a2a44;--border:#2e2e44;--shadow:0 2px 12px rgba(0,0,0,.25);--hover:rgba(255,255,255,.06)}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;overflow:hidden;transition:background .25s,color .25s}
 .app{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:480px;margin:0 auto;position:relative;overflow:hidden;background:var(--bg);transition:background .25s}
 .header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--bg);gap:6px;transition:background .25s,border .25s}
@@ -187,51 +187,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .nano-input-wrap button{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:10px 14px;font-size:14px;cursor:pointer;transition:.2s;flex-shrink:0}
 .nano-input-wrap button:active{transform:scale(.96)}
 
-/* ===== GRAPH / NODE EDITOR ===== */
-.graph-bar{display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;align-items:center}
-.graph-bar button{flex-shrink:0;padding:4px 10px;border:1px solid var(--border);border-radius:12px;background:var(--surface);font-size:10px;cursor:pointer;transition:.2s;color:var(--muted)}
-.graph-bar button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-.graph-bar button:active{opacity:.7}
-.graph-bar .gb-label{font-size:10px;color:var(--muted);margin-right:auto}
-
-.graph-canvas{position:relative;margin:0 -12px;height:55vh;min-height:300px;overflow:hidden;background:var(--graph-bg);border-radius:8px;cursor:grab;touch-action:none}
-.graph-canvas.dragging-canvas{cursor:grabbing}
-.graph-svg{position:absolute;inset:0;pointer-events:none;z-index:1}
-.graph-nodes-layer{position:absolute;inset:0;z-index:2}
-.graph-node{position:absolute;min-width:100px;max-width:180px;background:var(--node-bg);border:2px solid var(--node-border);border-radius:8px;box-shadow:var(--shadow);font-size:12px;line-height:1.4;touch-action:none;cursor:default;transition:border-color .15s,box-shadow .15s}
-.graph-node.selected{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-light)}
-.graph-node.connecting{border-color:#2ecc71;box-shadow:0 0 0 3px rgba(46,204,113,.3)}
-.graph-node .gn-handle{height:18px;cursor:grab;display:flex;align-items:center;justify-content:space-between;padding:0 8px;border-bottom:1px solid var(--border);gap:4px}
-.graph-node .gn-handle .gn-dots{color:rgba(0,0,0,.2);font-size:8px;letter-spacing:1px}
-.graph-node .gn-handle .gn-port{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:0;transition:opacity .2s;flex-shrink:0}
-.graph-node:hover .gn-handle .gn-port{opacity:.5}
-.graph-node .gn-title{padding:4px 8px;outline:none;min-height:16px;font-size:12px;font-weight:500;white-space:pre-wrap;word-break:break-word}
-.graph-node .gn-notes-toggle{position:absolute;bottom:2px;right:22px;font-size:10px;cursor:pointer;border:none;background:none;color:var(--muted);opacity:.4;transition:.2s;padding:2px}
-.graph-node .gn-notes-toggle:hover,.graph-node .gn-notes-toggle.open{opacity:1}
-.graph-node .gn-del{position:absolute;top:2px;right:2px;font-size:9px;cursor:pointer;border:none;background:none;color:var(--muted);opacity:0;transition:.2s;padding:2px;line-height:1;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center}
-.graph-node:hover .gn-del{opacity:.6}
-.graph-node .gn-del:hover{opacity:1;background:rgba(0,0,0,.08)}
-.graph-node .gn-notes{display:none;padding:4px 8px 18px;font-size:11px;color:var(--muted);outline:none;white-space:pre-wrap;word-break:break-word;border-top:1px solid var(--border);min-height:20px;line-height:1.5}
-.graph-node .gn-notes.open{display:block}
-.graph-node.dragging{opacity:.85;z-index:999!important}
-
-/* edges drawn on SVG */
-.graph-svg line,.graph-svg path{stroke-width:4;fill:none;stroke-linecap:round;cursor:pointer;transition:stroke-width .15s;stroke-linejoin:round}
-.graph-svg line:hover,.graph-svg path:hover{stroke-width:6;stroke:#fff;mix-blend-mode:difference}
-
-/* context menu */
-.ctx-menu{display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:500;min-width:130px;padding:4px 0;animation:fadeUp .12s ease}
-.ctx-menu.open{display:block}
-.ctx-menu .ctx-item{padding:6px 14px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.1s;color:var(--text)}
-.ctx-menu .ctx-item:active,.ctx-menu .ctx-item:hover{background:var(--hover)}
-.ctx-menu .ctx-item .ctx-icon{font-size:12px;width:16px;text-align:center}
-.ctx-menu .ctx-divider{height:1px;background:var(--border);margin:3px 8px}
-
-/* color picker for graph */
-.graph-color-picker{display:flex;gap:3px;flex-wrap:wrap}
-.graph-color-picker .gcs{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:.1s}
-.graph-color-picker .gcs.active{border-color:var(--accent)}
-
 /* ===== ONBOARDING / HELP ===== */
 .onboard-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:24px}
 .onboard-overlay.open{display:flex}
@@ -399,20 +354,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       </div>
     </div>
 
-    <div class="panel" id="panelGraph">
-      <div class="graph-bar">
-        <span class="gb-label">graph</span>
-        <button id="graphModeTree">🌳 tree</button>
-        <button id="graphModeGraph" class="active">🌐 graph</button>
-        <button id="graphAddNode">+ node</button>
-        <button id="graphSample">📋 sample</button>
-        <button id="graphClear">🗑️</button>
-      </div>
-      <div class="graph-canvas" id="graphCanvas">
-        <svg class="graph-svg" id="graphSvg"></svg>
-        <div class="graph-nodes-layer" id="graphNodesLayer"></div>
-      </div>
-    </div>
   </div>
 
   <div class="tab-bar">
@@ -422,9 +363,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <button class="tab-btn" data-tab="2" data-search="brain dump dump"><span class="tab-icon">🧠</span>dump</button>
       <button class="tab-btn" data-tab="3" data-search="time blocks schedule"><span class="tab-icon">⏰</span>blocks</button>
       <button class="tab-btn" data-tab="4" data-search="pomodoro timer"><span class="tab-icon">🍅</span>timer</button>
-      <button class="tab-btn" data-tab="5" data-search="graph node editor map mind"><span class="tab-icon">🕸️</span>graph</button>
-      <button class="tab-btn" data-tab="6" data-search="sprint task timer focus"><span class="tab-icon">🏃</span>sprint</button>
-      <button class="tab-btn" data-tab="7" data-search="nano notes short quick"><span class="tab-icon">💬</span>nano</button>
+      <button class="tab-btn" data-tab="5" data-search="sprint task timer focus"><span class="tab-icon">🏃</span>sprint</button>
+      <button class="tab-btn" data-tab="6" data-search="nano notes short quick"><span class="tab-icon">💬</span>nano</button>
     </div>
   </div>
 </div>
@@ -440,9 +380,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <button class="help-tab" data-page="3">dump</button>
       <button class="help-tab" data-page="4">blocks</button>
       <button class="help-tab" data-page="5">timer</button>
-      <button class="help-tab" data-page="6">graph</button>
-      <button class="help-tab" data-page="7">sprint</button>
-      <button class="help-tab" data-page="8">nano</button>
+      <button class="help-tab" data-page="6">sprint</button>
+      <button class="help-tab" data-page="7">nano</button>
     </div>
     <div class="help-body" id="helpBody">
       <div class="help-page active" data-page="0">
@@ -453,9 +392,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         <div class="hl"><kbd>3</kbd><span>brain dump</span></div>
         <div class="hl"><kbd>4</kbd><span>timeblocks</span></div>
         <div class="hl"><kbd>5</kbd><span>pomodoro timer</span></div>
-        <div class="hl"><kbd>6</kbd><span>graph editor</span></div>
-        <div class="hl"><kbd>7</kbd><span>sprint board</span></div>
-        <div class="hl"><kbd>8</kbd><span>nano notes</span></div>
+        <div class="hl"><kbd>6</kbd><span>sprint board</span></div>
+        <div class="hl"><kbd>7</kbd><span>nano notes</span></div>
         <div class="hl"><kbd>h</kbd><span>toggle help</span></div>
         <div class="hl"><kbd>n</kbd><span>night mode</span></div>
         <p style="margin-top:8px">💡 tap 💡 for random tips</p>
@@ -466,26 +404,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <div class="help-page" data-page="4"><p>Schedule with time blocks. Tap empty slot to add, tap block to edit. Day / 3-Day / Week / Month views.</p></div>
       <div class="help-page" data-page="5"><p>Auto-pomodoro: 25 work / 5 break. Runs all day, no start/stop. Add session notes.</p></div>
       <div class="help-page" data-page="6">
-        <p>Visual node editor. Create, connect, and arrange ideas.</p>
-        <div class="hl"><kbd>n</kbd><span>new node</span></div>
-        <div class="hl"><kbd>e</kbd><span>edge mode (click source, click target)</span></div>
-        <div class="hl"><kbd>Ctrl+click</kbd><span>select two nodes to connect</span></div>
-        <div class="hl"><kbd>Del</kbd><span>delete selected</span></div>
-        <div class="hl"><span>right-click</span><span>context menu on node/edge/canvas</span></div>
-        <div class="hl"><span>🌳 tree</span><span>auto-layout as tree</span></div>
-        <div class="hl"><span>🌐 graph</span><span>free-form placement</span></div>
-        <p style="margin-top:8px">Double-tap canvas → new node. Drag node by handle. Edge mode: click source, click target.</p>
-      </div>
-      <div class="help-page" data-page="7">
         <p>4 sprints per day, max 2 hours each. Assign one task per sprint.</p>
         <p>Swap tasks between sprints based on your energy. Mark done when complete.</p>
         <div class="hl"><span>drag ≡ handle</span><span>reorder sprints</span></div>
         <div class="hl"><span>tap ✓</span><span>mark sprint done</span></div>
-        <div class="hl"><kbd>7</kbd><span>sprint board</span></div>
+        <div class="hl"><kbd>6</kbd><span>sprint board</span></div>
       </div>
-      <div class="help-page" data-page="8">
+      <div class="help-page" data-page="7">
         <p>Tiny notes, big ideas. 3-5 words per note. Tap a note to show the full text.</p>
-        <div class="hl"><kbd>8</kbd><span>nano notes</span></div>
+        <div class="hl"><kbd>7</kbd><span>nano notes</span></div>
         <div class="hl"><span>tap note</span><span>toggle full text</span></div>
         <div class="hl"><kbd>Enter</kbd><span>save note</span></div>
       </div>
@@ -542,31 +469,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
 </div>
 
-<!-- CONTEXT MENU -->
-<div class="ctx-menu" id="ctxMenu">
-  <div class="ctx-item" id="ctxEdit"><span class="ctx-icon">✏️</span>edit</div>
-  <div class="ctx-item" id="ctxDelete"><span class="ctx-icon">🗑️</span>delete</div>
-  <div class="ctx-item" id="ctxColor"><span class="ctx-icon">🎨</span>color</div>
-  <div class="ctx-item" id="ctxNotes"><span class="ctx-icon">📝</span>toggle notes</div>
-  <div class="ctx-divider"></div>
-  <div class="ctx-item" id="ctxAddChild"><span class="ctx-icon">🌱</span>add child</div>
-  <div class="ctx-item" id="ctxAddSibling"><span class="ctx-icon">🌿</span>add sibling</div>
-  <div class="ctx-divider" id="ctxEdgeDivider"></div>
-  <div class="ctx-item" id="ctxEdgeColor"><span class="ctx-icon">🎨</span>edge color</div>
-  <div class="ctx-divider" id="ctxCanvasDivider"></div>
-  <div class="ctx-item" id="ctxAddNode"><span class="ctx-icon">➕</span>add node here</div>
-  <div class="ctx-item" id="ctxSample"><span class="ctx-icon">📋</span>load sample</div>
-</div>
-
 <script>
 const STORAGE_KEY='interstitial_journal';let state=loadState();let currentTab=0;let dragNote=null;let dragOffsetX=0,dragOffsetY=0;let maxZ=(state.stickies||[]).length+10;let pomoTick=null
 const COLORS=['#FFEAA7','#FFB8B8','#B8E8B8','#B8D4FF','#E8B8FF','#FFD4B8','#B8FFF0','#F0F0F0']
 const BLOCK_COLORS=['#4a90d9','#e74c3c','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#34495e','#e84393','#00b894']
-const GRAPH_COLORS=['#4a90d9','#e74c3c','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#34495e','#e84393','#00b894','#d63031','#0984e3']
 const START_HOUR=6,END_HOUR=23,HOUR_H=56;const WORK_MIN=25,BREAK_MIN=5
 let blockDate=new Date();let blockPeriod='day';let editingBlockId=null
 
-function defaultState(){return{entries:[],stickies:[],dumps:[],blocks:[],sprints:[],nano:[],stickySort:'added',blockPeriod:'day',pomo:null,onboardingDone:false,nightMode:false,graph:{nodes:[],edges:[],viewMode:'graph'}}}
+function defaultState(){return{entries:[],stickies:[],dumps:[],blocks:[],sprints:[],nano:[],stickySort:'added',blockPeriod:'day',pomo:null,onboardingDone:false,nightMode:false}}
 function loadState(){try{const r=localStorage.getItem(STORAGE_KEY);if(r){const s=JSON.parse(r);if(s&&typeof s==='object')return{...defaultState(),...s}}}catch(e){}return defaultState()}
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
@@ -587,7 +497,7 @@ document.getElementById('tabSearch').addEventListener('input',function(){const q
 
 // ===== TABS =====
 const tabBtns=document.querySelectorAll('.tab-btn')
-function switchTab(idx){currentTab=idx;document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===idx));tabBtns.forEach((b,i)=>b.classList.toggle('active',i===idx));if(idx===1)renderStickies();if(idx===2)renderDumps();if(idx===3)renderBlocks();if(idx===4){renderPomo();startPomoTick()}else stopPomoTick();if(idx===5)renderGraph();if(idx===6)renderSprints();if(idx===7)renderNano()}
+function switchTab(idx){currentTab=idx;document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===idx));tabBtns.forEach((b,i)=>b.classList.toggle('active',i===idx));if(idx===1)renderStickies();if(idx===2)renderDumps();if(idx===3)renderBlocks();if(idx===4){renderPomo();startPomoTick()}else stopPomoTick();if(idx===5)renderSprints();if(idx===6)renderNano()}
 tabBtns.forEach(b=>b.addEventListener('click',()=>switchTab(parseInt(b.dataset.tab))))
 
 // ===== GREETING =====
@@ -607,17 +517,13 @@ document.getElementById('dataModal').addEventListener('click',e=>{if(e.target===
 // ===== HINT =====
 let hintTimeout=null
 function showHint(msg){const el=document.getElementById('hintToast');el.textContent=msg;el.classList.add('show');clearTimeout(hintTimeout);hintTimeout=setTimeout(()=>el.classList.remove('show'),3000)}
-document.getElementById('hintBtn').addEventListener('click',()=>{const h=['write what you\'re doing right now','one thought per sticky note','brain dump = uncensored thoughts','drag stickies by the handle','tap timeline to add a time block','pomodoro runs automatically all day','press 1-8 to switch tabs','press h for help','night mode in header','graph: n=new node, e=edge mode','graph: Ctrl+click to connect nodes','export to keep a backup','timer auto-switches work/break','sprint: 4 blocks of 2 hours per day','sprint: drag ≡ to reorder tasks','nano: 3-5 words per note','nano: tap to expand'];showHint(h[Math.floor(Math.random()*h.length)])})
+document.getElementById('hintBtn').addEventListener('click',()=>{const h=['write what you\'re doing right now','one thought per sticky note','brain dump = uncensored thoughts','drag stickies by the handle','tap timeline to add a time block','pomodoro runs automatically all day','press 1-7 to switch tabs','press h for help','night mode in header','export to keep a backup','timer auto-switches work/break','sprint: 4 blocks of 2 hours per day','sprint: drag ≡ to reorder tasks','nano: 3-5 words per note','nano: tap to expand'];showHint(h[Math.floor(Math.random()*h.length)])})
 
 // ===== KEYBOARD =====
 document.addEventListener('keydown',e=>{if(e.key==='h'||e.key==='H'){document.getElementById('helpOverlay').classList.toggle('open');return}
 if(e.key==='1'){switchTab(0);return}if(e.key==='2'){switchTab(1);return}if(e.key==='3'){switchTab(2);return}if(e.key==='4'){switchTab(3);return}if(e.key==='5'){switchTab(4);return}if(e.key==='6'){switchTab(5);return}
 if(e.key==='7'){switchTab(6);return}
-if(e.key==='8'){switchTab(7);return}
-if(e.key==='n'||e.key==='N'){if(currentTab===5){addGraphNode(80+Math.random()*120,40+Math.random()*100);showHint('node added');return}}
-if(e.key==='e'||e.key==='E'){if(currentTab===5){graphEdgeMode=!graphEdgeMode;document.getElementById('graphModeGraph').textContent=graphEdgeMode?'🔗 edge: ON':'🌐 graph';showHint(graphEdgeMode?'edge mode: click source then target':'edge mode off');return}}
-if((e.key==='Delete'||e.key==='Backspace')&&currentTab===5&&graphSelected&&!e.target.closest('[contenteditable]')){deleteSelected();e.preventDefault();return}
-if(e.key==='Enter'&&!e.shiftKey){if(currentTab===0&&document.activeElement===document.getElementById('journalInput')){e.preventDefault();submitJournal()}if(currentTab===2&&document.activeElement===document.getElementById('dumpInput')){e.preventDefault();submitDump()}if(currentTab===4&&document.activeElement===document.getElementById('pomoNoteInput')){e.preventDefault();submitPomoNote()}if(currentTab===7&&document.activeElement===document.getElementById('nanoInput')){e.preventDefault();submitNano()}}})
+if(e.key==='Enter'&&!e.shiftKey){if(currentTab===0&&document.activeElement===document.getElementById('journalInput')){e.preventDefault();submitJournal()}if(currentTab===2&&document.activeElement===document.getElementById('dumpInput')){e.preventDefault();submitDump()}if(currentTab===4&&document.activeElement===document.getElementById('pomoNoteInput')){e.preventDefault();submitPomoNote()}if(currentTab===6&&document.activeElement===document.getElementById('nanoInput')){e.preventDefault();submitNano()}}})
 
 // ===== JOURNAL =====
 function renderJournal(){const list=document.getElementById('journalList');const te=state.entries.filter(e=>{const d=new Date(e.timestamp),n=new Date();return d.getDate()===n.getDate()&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()});if(!te.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">✍️</span>write what you\'re doing<br>as you move through your day</div>';return}
@@ -653,9 +559,9 @@ document.getElementById('dumpInput').addEventListener('keydown',e=>{if(e.key==='
 // ===== EXPORT / IMPORT =====
 document.getElementById('exportBtn').addEventListener('click',()=>{const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='interstitial-journal-'+todayStr()+'.json';a.click();URL.revokeObjectURL(u);showHint('exported ✓')})
 document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('importFile').click())
-document.getElementById('importFile').addEventListener('change',e=>{if(!e.target.files.length)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d&&(d.entries||d.stickies||d.dumps||d.blocks||d.graph)){state={...defaultState(),...d};saveState();renderJournal();renderStickies();renderDumps();renderBlocks();renderPomo();renderGraph();renderSprints();renderNano();showHint('imported ✓')}else showHint('invalid file')}catch(_){showHint('invalid json')}};r.readAsText(e.target.files[0]);e.target.value=''})
+document.getElementById('importFile').addEventListener('change',e=>{if(!e.target.files.length)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d&&(d.entries||d.stickies||d.dumps||d.blocks)){state={...defaultState(),...d};saveState();renderJournal();renderStickies();renderDumps();renderBlocks();renderPomo();renderSprints();renderNano();showHint('imported ✓')}else showHint('invalid file')}catch(_){showHint('invalid json')}};r.readAsText(e.target.files[0]);e.target.value=''})
 
-document.getElementById('clearBtn').addEventListener('click',()=>{if(confirm('delete all data?')){state=defaultState();saveState();renderJournal();renderStickies();renderDumps();renderBlocks();renderPomo();renderGraph();renderSprints();renderNano();document.getElementById('dataModal').classList.remove('open');showHint('cleared')}})
+document.getElementById('clearBtn').addEventListener('click',()=>{if(confirm('delete all data?')){state=defaultState();saveState();renderJournal();renderStickies();renderDumps();renderBlocks();renderPomo();renderSprints();renderNano();document.getElementById('dataModal').classList.remove('open');showHint('cleared')}})
 // ===== TIMEBLOCKING =====
 function renderBlocks(){const w=document.getElementById('timelineWrap'),l=document.getElementById('dateLabel');document.querySelectorAll('.period-btn').forEach(b=>b.classList.toggle('active',b.dataset.period===blockPeriod));document.getElementById('dateNav').style.display=blockPeriod==='month'?'none':'flex';const bl=state.blocks||[]
 if(blockPeriod==='day'||blockPeriod==='tomorrow'){const dt=blockPeriod==='tomorrow'?addDays(new Date(),1):blockDate;l.textContent=formatDateLabel(dt);renderDayView(w,dt,bl.filter(b=>b.date===dateStr(dt)))}else if(blockPeriod==='3day'){l.textContent='next 3 days';renderMultiDayView(w,3,bl)}else if(blockPeriod==='week'){l.textContent='this week';renderMultiDayView(w,7,bl)}else if(blockPeriod==='month'){renderMonthView(w,bl)}}
@@ -894,134 +800,8 @@ document.getElementById('nanoInput').addEventListener('input',function(){
 });
 document.getElementById('nanoSearch').addEventListener('input',()=>renderNano());
 
-// ===== GRAPH / NODE EDITOR =====
-let graphSelected=null,graphEdgeMode=false,graphConnecting=null,graphCtxTarget=null,graphCtxType=null,graphNodeEls={}
-function initGraph(){if(!state.graph||!Array.isArray(state.graph.nodes))state.graph={nodes:[],edges:[],viewMode:'graph'}}
-
-function renderGraph(){initGraph();const layer=document.getElementById('graphNodesLayer'),svg=document.getElementById('graphSvg'),canvas=document.getElementById('graphCanvas')
-svg.innerHTML='';layer.innerHTML='';graphNodeEls={}
-const g=state.graph;if(!g.nodes.length){const c=GRAPH_COLORS;g.nodes.push({id:uid(),text:'Journal',notes:'',x:140,y:20,color:c[0]},{id:uid(),text:'Tasks',notes:'',x:60,y:130,color:c[1]},{id:uid(),text:'Notes',notes:'',x:220,y:130,color:c[2]});g.edges.push({id:uid(),source:g.nodes[0].id,target:g.nodes[1].id,color:c[1]},{id:uid(),source:g.nodes[0].id,target:g.nodes[2].id,color:c[2]});graphSelected=g.nodes[0].id;saveState()}
-g.nodes.forEach(n=>{const el=document.createElement('div');el.className='graph-node'+(graphSelected===n.id?' selected':'')+(n.id===graphConnecting?' connecting':'');el.style.left=n.x+'px';el.style.top=n.y+'px';el.style.borderColor=n.color||'var(--node-border)';el.dataset.id=n.id;graphNodeEls[n.id]=el
-el.innerHTML='<div class="gn-handle"><span class="gn-dots">⋯⋯</span><span class="gn-port"></span></div><div class="gn-title" contenteditable="true">'+escHtml(n.text||'node')+'</div><button class="gn-notes-toggle">📝</button><button class="gn-del">✕</button><div class="gn-notes">'+escHtml(n.notes||'')+'</div>'
-el.addEventListener('mousedown',e=>startNodeDrag(e,el,n.id))
-el.addEventListener('touchstart',e=>startNodeDrag(e,el,n.id),{passive:false})
-el.querySelector('.gn-title').addEventListener('blur',()=>{nn=state.graph.nodes.find(x=>x.id===n.id);if(nn)nn.text=el.querySelector('.gn-title').textContent.trim()||'node';saveState()})
-el.querySelector('.gn-title').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();el.querySelector('.gn-title').blur()}})
-el.querySelector('.gn-notes-toggle').addEventListener('click',e=>{e.stopPropagation();const ne=el.querySelector('.gn-notes');ne.classList.toggle('open');el.querySelector('.gn-notes-toggle').classList.toggle('open')})
-el.querySelector('.gn-del').addEventListener('click',e=>{e.stopPropagation();deleteNode(n.id)})
-el.querySelector('.gn-notes').addEventListener('blur',()=>{const nn=state.graph.nodes.find(x=>x.id===n.id);if(nn)nn.notes=el.querySelector('.gn-notes').textContent.trim();saveState()})
-el.addEventListener('click',e=>{if(graphEdgeMode||e.ctrlKey||e.metaKey){if(!graphConnecting){graphConnecting=n.id;showHint('now click target node')}else if(graphConnecting!==n.id){addEdge(graphConnecting,n.id);graphConnecting=null;graphEdgeMode=false;document.getElementById('graphModeGraph').textContent='🌐 graph';showHint('edge created!')}else{graphConnecting=null;showHint('cancelled')}return}
-graphSelected=n.id;renderGraph()})
-el.addEventListener('dblclick',()=>{const ne=el.querySelector('.gn-notes');ne.classList.toggle('open');el.querySelector('.gn-notes-toggle').classList.toggle('open')})
-el.addEventListener('contextmenu',e=>{e.preventDefault();showContextMenu('node',n.id,e.clientX,e.clientY)})
-layer.appendChild(el)})
-
-// Draw edges
-g.edges.forEach(e=>{const sn=g.nodes.find(x=>x.id===e.source),tn=g.nodes.find(x=>x.id===e.target);if(!sn||!tn)return
-const isSelected=graphSelected==='edge:'+e.id
-const sx=sn.x+75,sy=sn.y+30, tx=tn.x+75,ty=tn.y+30, mx=(sx+tx)/2,my=(sy+ty)/2
-const path=document.createElementNS('http://www.w3.org/2000/svg','path')
-path.setAttribute('d','M'+sx+' '+sy+' Q'+sx+' '+(sy+ty)/2+' '+mx+' '+my+' Q'+tx+' '+(sy+ty)/2+' '+tx+' '+ty)
-path.setAttribute('stroke',e.color||'#888')
-path.setAttribute('stroke-width',isSelected?'4':'2')
-path.setAttribute('stroke-dasharray',isSelected?'6,3':'')
-path.setAttribute('data-id',e.id);path.style.pointerEvents='stroke'
-path.addEventListener('contextmenu',ev=>{ev.preventDefault();showContextMenu('edge',e.id,ev.clientX,ev.clientY)})
-path.addEventListener('click',()=>{graphSelected='edge:'+e.id;renderGraph()})
-svg.appendChild(path)})}
-
-function addGraphNode(x,y){initGraph();const g=state.graph;const colors=GRAPH_COLORS;g.nodes.push({id:uid(),text:'new node',notes:'',x:x||80,y:y||40,color:colors[g.nodes.length%colors.length]});saveState();renderGraph();return g.nodes[g.nodes.length-1]}
-
-function addEdge(source,target){initGraph();const g=state.graph;if(g.edges.some(e=>(e.source===source&&e.target===target)||(e.source===target&&e.target===source))){showHint('edge already exists');return}
-g.edges.push({id:uid(),source,target,color:'#888'});saveState();renderGraph()}
-
-function deleteNode(id){initGraph();const g=state.graph;g.nodes=g.nodes.filter(n=>n.id!==id);g.edges=g.edges.filter(e=>e.source!==id&&e.target!==id);graphSelected=null;saveState();renderGraph()}
-
-function deleteEdge(id){initGraph();const g=state.graph;g.edges=g.edges.filter(e=>e.id!==id);graphSelected=null;saveState();renderGraph()}
-
-function deleteSelected(){if(!graphSelected)return;if(graphSelected.startsWith('edge:')){deleteEdge(graphSelected.replace('edge:',''))}else{deleteNode(graphSelected)}}
-
-function cycleNodeColor(id){initGraph();const n=state.graph.nodes.find(x=>x.id===id);if(!n)return;const idx=GRAPH_COLORS.indexOf(n.color);n.color=GRAPH_COLORS[(idx+1)%GRAPH_COLORS.length];saveState();renderGraph()}
-
-function cycleEdgeColor(id){initGraph();const e=state.graph.edges.find(x=>x.id===id);if(!e)return;const idx=GRAPH_COLORS.indexOf(e.color);e.color=GRAPH_COLORS[(idx+1)%GRAPH_COLORS.length];saveState();renderGraph()}
-
-let nodeDragData=null
-function startNodeDrag(e,el,id){if(e.target.closest('.gn-title')||e.target.closest('.gn-notes')||e.target.closest('.gn-notes-toggle'))return;e.preventDefault();nn=state.graph.nodes.find(x=>x.id===id);if(!nn)return;const t=e.touches?e.touches[0]:e,r=el.getBoundingClientRect(),c=document.getElementById('graphCanvas').getBoundingClientRect()
-nodeDragData={id,offsetX:t.clientX-r.left,offsetY:t.clientY-r.top,canvasRect:c};el.classList.add('dragging')
-document.addEventListener('mousemove',onNodeDrag);document.addEventListener('mouseup',endNodeDrag);document.addEventListener('touchmove',onNodeDrag,{passive:false});document.addEventListener('touchend',endNodeDrag)}
-
-function onNodeDrag(e){if(!nodeDragData)return;e.preventDefault();const t=e.touches?e.touches[0]:e,c=nodeDragData.canvasRect;let x=t.clientX-c.left-nodeDragData.offsetX,y=t.clientY-c.top-nodeDragData.offsetY;x=Math.max(0,x);y=Math.max(0,y)
-const n=state.graph.nodes.find(x=>x.id===nodeDragData.id);if(n){n.x=x;n.y=y;saveState();renderGraph()}}
-
-function endNodeDrag(){if(!nodeDragData)return;const el=document.querySelector('.graph-node.dragging');if(el)el.classList.remove('dragging');nodeDragData=null;document.removeEventListener('mousemove',onNodeDrag);document.removeEventListener('mouseup',endNodeDrag);document.removeEventListener('touchmove',onNodeDrag);document.removeEventListener('touchend',endNodeDrag)}
-
-// Canvas click for adding nodes
-document.getElementById('graphCanvas').addEventListener('dblclick',e=>{const r=document.getElementById('graphCanvas').getBoundingClientRect();addGraphNode(e.clientX-r.left-50,e.clientY-r.top-20);showHint('node added')})
-document.getElementById('graphCanvas').addEventListener('contextmenu',e=>{e.preventDefault();showContextMenu('canvas',null,e.clientX,e.clientY)})
-
-// Canvas drag to pan
-let canvasPan=false,panStartX=0,panStartY=0,panOffX=0,panOffY=0
-document.getElementById('graphCanvas').addEventListener('mousedown',e=>{if(e.target!==document.getElementById('graphCanvas')&&e.target!==document.getElementById('graphNodesLayer')&&e.target!==document.getElementById('graphSvg'))return;canvasPan=true;panStartX=e.clientX;panStartY=e.clientY;const s=document.getElementById('graphCanvas').style;panOffX=parseInt(s.backgroundPositionX)||0;panOffY=parseInt(s.backgroundPositionY)||0;document.getElementById('graphCanvas').classList.add('dragging-canvas')})
-document.addEventListener('mousemove',e=>{if(!canvasPan)return;const dx=e.clientX-panStartX,dy=e.clientY-panStartY;state.graph.nodes.forEach(n=>{n.x+=dx;n.y+=dy});panStartX=e.clientX;panStartY=e.clientY;renderGraph()})
-document.addEventListener('mouseup',()=>{if(canvasPan){canvasPan=false;document.getElementById('graphCanvas').classList.remove('dragging-canvas');saveState()}})
-
-// Graph controls
-document.getElementById('graphAddNode').addEventListener('click',()=>{addGraphNode(80+Math.random()*80,40+Math.random()*80)})
-document.getElementById('graphSample').addEventListener('click',()=>{loadSampleGraph()})
-document.getElementById('graphClear').addEventListener('click',()=>{if(confirm('clear graph?')){state.graph={nodes:[],edges:[],viewMode:'graph'};graphSelected=null;graphConnecting=null;saveState();renderGraph();showHint('cleared')}})
-document.getElementById('graphModeTree').addEventListener('click',()=>{layoutTree();showHint('tree layout')})
-document.getElementById('graphModeGraph').addEventListener('click',()=>{graphEdgeMode=!graphEdgeMode;document.getElementById('graphModeGraph').textContent=graphEdgeMode?'🔗 edge: ON':'🌐 graph';showHint(graphEdgeMode?'edge mode on: click source then target':'graph mode')})
-
-function layoutTree(){initGraph();const g=state.graph;if(!g.nodes.length)return;const root=g.nodes[0];layoutTreeNode(g,root,0,0,40);root.x=Math.max(root.x-75,50);root.y=40;saveState();renderGraph();showHint('tree layout done')}
-function layoutTreeNode(g,n,level,offset,spacingX){const spacingY=80;const children=g.edges.filter(e=>e.source===n.id).map(e=>g.nodes.find(x=>x.id===e.target)).filter(Boolean);if(!children.length){n.x=offset;n.y=level*spacingY+40;return spacingX}
-let cx=0;children.forEach(c=>{const w=layoutTreeNode(g,c,level+1,offset+cx,spacingX);cx+=w});const mid=cx/2-spacingX/2;n.x=offset+Math.max(mid,0);n.y=level*spacingY+40;return Math.max(cx,spacingX)}
-
-function loadSampleGraph(){initGraph();const g=state.graph;g.nodes=[];g.edges=[]
-const colors=GRAPH_COLORS;function add(id,text,x,y,color){g.nodes.push({id,text,notes:'',x,y,color})};function edge(s,t,c){g.edges.push({id:uid(),source:s,target:t,color:c||'#888'})}
-add('root','Interstitial\nJournaling',200,20,colors[0])
-add('a','Daily Log',100,120,colors[1]);edge('root','a',colors[1])
-add('b','Sticky Notes',300,120,colors[2]);edge('root','b',colors[2])
-add('c','Time Blocks',200,220,colors[3]);edge('root','c',colors[3])
-add('d','Brain Dump',60,220,colors[4]);edge('a','d',colors[4])
-add('e','Pomodoro',340,220,colors[5]);edge('b','e',colors[5])
-add('f','Graph View',100,320,colors[6]);edge('c','f',colors[6])
-add('g','Night Mode',300,320,colors[7]);edge('c','g',colors[7])
-saveState();graphSelected='root';renderGraph();showHint('sample graph loaded')}
-
-// Context Menu
-function showContextMenu(type,id,x,y){graphCtxType=type;graphCtxTarget=id;const m=document.getElementById('ctxMenu')
-// Show/hide items based on type
-document.getElementById('ctxEdit').style.display=(type==='node')?'flex':'none'
-document.getElementById('ctxDelete').style.display=(type==='node'||type==='edge')?'flex':'none'
-document.getElementById('ctxColor').style.display=(type==='node'||type==='edge')?'flex':'none'
-document.getElementById('ctxNotes').style.display=(type==='node')?'flex':'none'
-document.getElementById('ctxAddChild').style.display=(type==='node')?'flex':'none'
-document.getElementById('ctxAddSibling').style.display='none'
-document.getElementById('ctxEdgeDivider').style.display=(type==='edge')?'block':'none'
-document.getElementById('ctxEdgeColor').style.display=(type==='edge')?'flex':'none'
-document.getElementById('ctxCanvasDivider').style.display=(type==='canvas')?'block':'none'
-document.getElementById('ctxAddNode').style.display=(type==='canvas')?'flex':'none'
-document.getElementById('ctxSample').style.display=(type==='canvas')?'flex':'none'
-if(type==='edge')document.getElementById('ctxDelete').style.display='flex'
-
-m.style.left=x+'px';m.style.top=y+'px'
-// Keep in viewport
-const mr=m.getBoundingClientRect();if(mr.right>window.innerWidth)m.style.left=(window.innerWidth-mr.width-8)+'px'
-if(mr.bottom>window.innerHeight)m.style.top=(window.innerHeight-mr.height-8)+'px'
-m.classList.add('open')}
-
-function hideContextMenu(){document.getElementById('ctxMenu').classList.remove('open');graphCtxType=null;graphCtxTarget=null}
-document.addEventListener('click',e=>{if(!e.target.closest('.ctx-menu'))hideContextMenu()})
-document.getElementById('ctxDelete').addEventListener('click',()=>{if(graphCtxType==='node')deleteNode(graphCtxTarget);else if(graphCtxType==='edge')deleteEdge(graphCtxTarget);hideContextMenu()})
-document.getElementById('ctxColor').addEventListener('click',()=>{if(graphCtxType==='node')cycleNodeColor(graphCtxTarget);else if(graphCtxType==='edge')cycleEdgeColor(graphCtxTarget);hideContextMenu();renderGraph()})
-document.getElementById('ctxEdit').addEventListener('click',()=>{const n=state.graph.nodes.find(x=>x.id===graphCtxTarget);if(n){const el=document.querySelector('.graph-node[data-id="'+graphCtxTarget+'"] .gn-title');if(el)el.focus()};hideContextMenu()})
-document.getElementById('ctxNotes').addEventListener('click',()=>{const el=document.querySelector('.graph-node[data-id="'+graphCtxTarget+'"] .gn-notes-toggle');if(el)el.click();hideContextMenu()})
-document.getElementById('ctxAddChild').addEventListener('click',()=>{const p=state.graph.nodes.find(x=>x.id===graphCtxTarget);if(!p)return;const n=addGraphNode(p.x+60,p.y+80);if(n){n.color=p.color;addEdge(graphCtxTarget,n.id);saveState();renderGraph()};hideContextMenu()})
-document.getElementById('ctxAddNode').addEventListener('click',()=>{addGraphNode(80+Math.random()*80,40+Math.random()*80);hideContextMenu()})
-document.getElementById('ctxSample').addEventListener('click',()=>{loadSampleGraph();hideContextMenu()})
-
 // ===== ONBOARDING =====
-const obSteps=[{icon:'🧠',title:'welcome to your journal',desc:'Structure, flexibility, and instant feedback — all in one place.'},{icon:'📝',title:'journal',desc:'Write what you\'re doing as you do it. One entry per activity.'},{icon:'📌',title:'sticky notes',desc:'Pin your thoughts. Drag by the ⋯⋯ handle. Tap 🎨 for colors.'},{icon:'🧠',title:'brain dump',desc:'Unfiltered capture. Type + Enter saves one thought.'},{icon:'⏰',title:'timeblocks',desc:'Schedule on a timeline. Day, 3-Day, Week, or Month view.'},{icon:'🍅',title:'pomodoro timer',desc:'25 work / 5 break. Runs all day automatically.'},{icon:'🕸️',title:'graph editor',desc:'Visual node editor. Press <b>n</b> for node, <b>e</b> for edge mode. Ctrl+click to connect.'},{icon:'🏃',title:'sprint board',desc:'4 sprints per day. Assign one task per 2-hour block. Swap tasks by dragging.'}]
+const obSteps=[{icon:'🧠',title:'welcome to your journal',desc:'Structure, flexibility, and instant feedback — all in one place.'},{icon:'📝',title:'journal',desc:'Write what you\'re doing as you do it. One entry per activity.'},{icon:'📌',title:'sticky notes',desc:'Pin your thoughts. Drag by the ⋯⋯ handle. Tap 🎨 for colors.'},{icon:'🧠',title:'brain dump',desc:'Unfiltered capture. Type + Enter saves one thought.'},{icon:'⏰',title:'timeblocks',desc:'Schedule on a timeline. Day, 3-Day, Week, or Month view.'},{icon:'🍅',title:'pomodoro timer',desc:'25 work / 5 break. Runs all day automatically.'},{icon:'🏃',title:'sprint board',desc:'4 sprints per day. Assign one task per 2-hour block. Swap tasks by dragging.'},{icon:'💬',title:'nano notes',desc:'3-5 words per note. Tap to expand. Quick capture.'}]
 let obStep=0
 function showOnboarding(){if(state.onboardingDone)return;document.getElementById('onboardOverlay').classList.add('open');renderObStep()}
 function renderObStep(){const s=obSteps[obStep];document.getElementById('obIcon').textContent=s.icon;document.getElementById('obTitle').textContent=s.title;document.getElementById('obDesc').innerHTML=s.desc;document.getElementById('obDots').innerHTML=obSteps.map((_,i)=>'<span class="ob-dot'+(i===obStep?' active':'')+'"></span>').join('');document.getElementById('obNext').textContent=obStep<obSteps.length-1?'next':'start using it'}
@@ -1035,7 +815,7 @@ document.getElementById('onboardOverlay').addEventListener('click',e=>{if(e.targ
 applyNight()
 blockPeriod=state.blockPeriod||'day'
 if(blockPeriod==='tomorrow')blockDate=addDays(new Date(),1)
-renderJournal();renderStickies();renderDumps();renderBlocks();renderGraph();renderSprints();renderNano()
+renderJournal();renderStickies();renderDumps();renderBlocks();renderSprints();renderNano()
 showOnboarding()
 if(currentTab===4)startPomoTick()
 let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(currentTab===1)renderStickies()},300)})
