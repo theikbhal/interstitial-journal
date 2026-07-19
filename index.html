@@ -139,34 +139,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .pomo-note .pn-del{border:none;background:none;color:var(--muted);font-size:12px;cursor:pointer;padding:1px;flex-shrink:0}
 .pomo-reset{width:100%;padding:6px;margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);background:none;color:var(--muted);font-size:11px;cursor:pointer}
 
-/* ===== NANO NOTES ===== */
-.nano-search{width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;outline:none;background:var(--surface);margin-bottom:8px;transition:.2s}
-.nano-search:focus{border-color:var(--accent)}
-.nano-search::placeholder{color:var(--muted)}
-.nano-list{display:flex;flex-direction:column;gap:4px;margin-bottom:12px}
-.nano-item{background:var(--surface);border-radius:var(--radius);padding:10px 12px;box-shadow:var(--shadow);font-size:13px;line-height:1.5;cursor:pointer;transition:.2s;word-break:break-word;border-left:3px solid var(--accent);position:relative}
-.nano-item:active{transform:scale(.98)}
-.nano-item .nano-text{display:inline}
-.nano-item .nano-more{color:var(--muted);font-size:11px;margin-left:4px}
-.nano-item .nano-full{display:none;color:var(--text)}
-.nano-item.expanded .nano-full{display:inline}
-.nano-item.expanded .nano-more{display:none}
-.nano-item .nano-del{position:absolute;top:4px;right:4px;border:none;background:none;color:var(--muted);font-size:10px;cursor:pointer;opacity:0;transition:.2s;padding:2px 4px;border-radius:4px}
-.nano-item:hover .nano-del{opacity:.6}
-.nano-item .nano-del:hover{opacity:1;background:var(--hover)}
-.nano-input-wrap{position:sticky;bottom:0;padding-top:6px;background:var(--bg)}
-.nano-input-wrap .nano-row{display:flex;gap:6px;align-items:center}
-.nano-input-wrap input{flex:1;border:1.5px solid var(--border);border-radius:var(--radius);padding:10px 12px;font-size:14px;font-family:inherit;outline:none;background:var(--surface);transition:.2s}
-.nano-input-wrap input:focus{border-color:var(--accent)}
-.nano-input-wrap .nano-wc{font-size:10px;color:var(--muted);flex-shrink:0;width:32px;text-align:center}
-.nano-input-wrap .nano-wc.warn{color:#e74c3c}
-.nano-input-wrap button{background:var(--accent);color:#fff;border:none;border-radius:var(--radius);padding:10px 14px;font-size:14px;cursor:pointer;transition:.2s;flex-shrink:0}
-.nano-input-wrap button:active{transform:scale(.96)}
-.nano-demo{display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border:1px solid var(--border);border-radius:10px;background:var(--surface);font-size:9px;cursor:pointer;color:var(--muted);margin-bottom:6px;transition:.2s}
-.nano-demo:hover{border-color:var(--accent);color:var(--accent)}
-.nano-demo.playing{background:var(--accent);color:#fff;border-color:var(--accent)}
-.nano-demo-status{font-size:9px;color:var(--muted);margin-left:6px;display:inline}
-
 /* ===== ONBOARDING / HELP ===== */
 .onboard-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:24px}
 .onboard-overlay.open{display:flex}
@@ -309,23 +281,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       </div>
     </div>
 
-    <div class="panel" id="panelNano">
-      <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px">
-        <input class="nano-search" id="nanoSearch" placeholder="🔍 search nano notes..." autocomplete="off" style="margin-bottom:0;flex:1">
-        <button class="nano-demo" id="nanoDemo">▶ demo</button>
-      </div>
-      <div class="nano-list" id="nanoList">
-        <div class="empty-state"><span class="empty-icon">💬</span>tiny notes go here</div>
-      </div>
-      <div class="nano-input-wrap">
-        <div class="nano-row">
-          <input id="nanoInput" placeholder="short note (3-5 words) ..." autocomplete="off">
-          <span class="nano-wc" id="nanoWc">0</span>
-          <button id="nanoSubmit">+</button>
-        </div>
-      </div>
-    </div>
-
   </div>
 
   <div class="tab-bar">
@@ -335,7 +290,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <button class="tab-btn" data-tab="2" data-search="brain dump dump"><span class="tab-icon">🧠</span>dump</button>
       <button class="tab-btn" data-tab="3" data-search="time blocks schedule"><span class="tab-icon">⏰</span>blocks</button>
       <button class="tab-btn" data-tab="4" data-search="pomodoro timer"><span class="tab-icon">🍅</span>timer</button>
-      <button class="tab-btn" data-tab="5" data-search="nano notes short quick"><span class="tab-icon">💬</span>nano</button>
     </div>
   </div>
 </div>
@@ -351,7 +305,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <button class="help-tab" data-page="3">dump</button>
       <button class="help-tab" data-page="4">blocks</button>
       <button class="help-tab" data-page="5">timer</button>
-      <button class="help-tab" data-page="6">nano</button>
     </div>
     <div class="help-body" id="helpBody">
       <div class="help-page active" data-page="0">
@@ -362,7 +315,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         <div class="hl"><kbd>3</kbd><span>brain dump</span></div>
         <div class="hl"><kbd>4</kbd><span>timeblocks</span></div>
         <div class="hl"><kbd>5</kbd><span>pomodoro timer</span></div>
-        <div class="hl"><kbd>6</kbd><span>nano notes</span></div>
         <div class="hl"><kbd>h</kbd><span>toggle help</span></div>
         <div class="hl"><kbd>n</kbd><span>night mode</span></div>
         <p style="margin-top:8px">💡 tap 💡 for random tips</p>
@@ -372,13 +324,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <div class="help-page" data-page="3"><p>Rapid-fire capture. No filter. Type + Enter = one thought saved.</p></div>
       <div class="help-page" data-page="4"><p>Schedule with time blocks. Tap empty slot to add, tap block to edit. Day / 3-Day / Week / Month views.</p></div>
       <div class="help-page" data-page="5"><p>Auto-pomodoro: 25 work / 5 break. Runs all day, no start/stop. Add session notes.</p></div>
-      <div class="help-page" data-page="6">
-        <p>Tiny notes, big ideas. 3-5 words per note. Tap a note to show the full text. Tap ▶ demo to try it.</p>
-        <div class="hl"><kbd>6</kbd><span>nano notes</span></div>
-        <div class="hl"><span>tap note</span><span>toggle full text</span></div>
-        <div class="hl"><kbd>Enter</kbd><span>save note</span></div>
-        <div class="hl"><span>▶ demo</span><span>auto-play add/list/delete</span></div>
-      </div>
     </div>
     <button class="close-help" id="closeHelp">got it</button>
   </div>
@@ -439,7 +384,7 @@ const BLOCK_COLORS=['#4a90d9','#e74c3c','#2ecc71','#f39c12','#9b59b6','#1abc9c',
 const START_HOUR=6,END_HOUR=23,HOUR_H=56;const WORK_MIN=25,BREAK_MIN=5
 let blockDate=new Date();let blockPeriod='day';let editingBlockId=null
 
-function defaultState(){return{entries:[],stickies:[],dumps:[],blocks:[],nano:[],stickySort:'added',blockPeriod:'day',pomo:null,onboardingDone:false,nightMode:false}}
+function defaultState(){return{entries:[],stickies:[],dumps:[],blocks:[],stickySort:'added',blockPeriod:'day',pomo:null,onboardingDone:false,nightMode:false}}
 function loadState(){try{const r=localStorage.getItem(STORAGE_KEY);if(r){const s=JSON.parse(r);if(s&&typeof s==='object')return{...defaultState(),...s}}}catch(e){}return defaultState()}
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
@@ -460,7 +405,7 @@ document.getElementById('tabSearch').addEventListener('input',function(){const q
 
 // ===== TABS =====
 const tabBtns=document.querySelectorAll('.tab-btn')
-function switchTab(idx){currentTab=idx;document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===idx));tabBtns.forEach((b,i)=>b.classList.toggle('active',i===idx));if(idx===1)renderStickies();if(idx===2)renderDumps();if(idx===3)renderBlocks();if(idx===4){renderPomo();startPomoTick()}else stopPomoTick();if(idx===5)renderNano()}
+function switchTab(idx){currentTab=idx;document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===idx));tabBtns.forEach((b,i)=>b.classList.toggle('active',i===idx));if(idx===1)renderStickies();if(idx===2)renderDumps();if(idx===3)renderBlocks();if(idx===4){renderPomo();startPomoTick()}else stopPomoTick()}
 tabBtns.forEach(b=>b.addEventListener('click',()=>switchTab(parseInt(b.dataset.tab))))
 
 // ===== GREETING =====
@@ -480,12 +425,12 @@ document.getElementById('dataModal').addEventListener('click',e=>{if(e.target===
 // ===== HINT =====
 let hintTimeout=null
 function showHint(msg){const el=document.getElementById('hintToast');el.textContent=msg;el.classList.add('show');clearTimeout(hintTimeout);hintTimeout=setTimeout(()=>el.classList.remove('show'),3000)}
-document.getElementById('hintBtn').addEventListener('click',()=>{const h=['write what you\'re doing right now','one thought per sticky note','brain dump = uncensored thoughts','drag stickies by the handle','tap timeline to add a time block','pomodoro runs automatically all day','press 1-6 to switch tabs','press h for help','night mode in header','export to keep a backup','timer auto-switches work/break','nano: 3-5 words per note','nano: tap to expand','nano: ▶ demo to try it'];showHint(h[Math.floor(Math.random()*h.length)])})
+document.getElementById('hintBtn').addEventListener('click',()=>{const h=['write what you\'re doing right now','one thought per sticky note','brain dump = uncensored thoughts','drag stickies by the handle','tap timeline to add a time block','pomodoro runs automatically all day','press 1-5 to switch tabs','press h for help','night mode in header','export to keep a backup','timer auto-switches work/break'];showHint(h[Math.floor(Math.random()*h.length)])})
 
 // ===== KEYBOARD =====
 document.addEventListener('keydown',e=>{if(e.key==='h'||e.key==='H'){document.getElementById('helpOverlay').classList.toggle('open');return}
-if(e.key==='1'){switchTab(0);return}if(e.key==='2'){switchTab(1);return}if(e.key==='3'){switchTab(2);return}if(e.key==='4'){switchTab(3);return}if(e.key==='5'){switchTab(4);return}if(e.key==='6'){switchTab(5);return}
-if(e.key==='Enter'&&!e.shiftKey){if(currentTab===0&&document.activeElement===document.getElementById('journalInput')){e.preventDefault();submitJournal()}if(currentTab===2&&document.activeElement===document.getElementById('dumpInput')){e.preventDefault();submitDump()}if(currentTab===4&&document.activeElement===document.getElementById('pomoNoteInput')){e.preventDefault();submitPomoNote()}if(currentTab===5&&document.activeElement===document.getElementById('nanoInput')){e.preventDefault();submitNano()}}})
+if(e.key==='1'){switchTab(0);return}if(e.key==='2'){switchTab(1);return}if(e.key==='3'){switchTab(2);return}if(e.key==='4'){switchTab(3);return}if(e.key==='5'){switchTab(4);return}
+if(e.key==='Enter'&&!e.shiftKey){if(currentTab===0&&document.activeElement===document.getElementById('journalInput')){e.preventDefault();submitJournal()}if(currentTab===2&&document.activeElement===document.getElementById('dumpInput')){e.preventDefault();submitDump()}if(currentTab===4&&document.activeElement===document.getElementById('pomoNoteInput')){e.preventDefault();submitPomoNote()}}})
 
 // ===== JOURNAL =====
 function renderJournal(){const list=document.getElementById('journalList');const te=state.entries.filter(e=>{const d=new Date(e.timestamp),n=new Date();return d.getDate()===n.getDate()&&d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()});if(!te.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">✍️</span>write what you\'re doing<br>as you move through your day</div>';return}
@@ -521,9 +466,9 @@ document.getElementById('dumpInput').addEventListener('keydown',e=>{if(e.key==='
 // ===== EXPORT / IMPORT =====
 document.getElementById('exportBtn').addEventListener('click',()=>{const b=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='interstitial-journal-'+todayStr()+'.json';a.click();URL.revokeObjectURL(u);showHint('exported ✓')})
 document.getElementById('importBtn').addEventListener('click',()=>document.getElementById('importFile').click())
-document.getElementById('importFile').addEventListener('change',e=>{if(!e.target.files.length)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d&&(d.entries||d.stickies||d.dumps||d.blocks)){state={...defaultState(),...d};saveState();renderJournal();renderStickies();renderDumps();renderBlocks();renderPomo();renderNano();showHint('imported ✓')}else showHint('invalid file')}catch(_){showHint('invalid json')}};r.readAsText(e.target.files[0]);e.target.value=''})
+document.getElementById('importFile').addEventListener('change',e=>{if(!e.target.files.length)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(d&&(d.entries||d.stickies||d.dumps||d.blocks)){state={...defaultState(),...d};saveState();renderJournal();renderStickies();renderDumps();renderBlocks();renderPomo();showHint('imported ✓')}else showHint('invalid file')}catch(_){showHint('invalid json')}};r.readAsText(e.target.files[0]);e.target.value=''})
 
-document.getElementById('clearBtn').addEventListener('click',()=>{if(confirm('delete all data?')){state=defaultState();saveState();renderJournal();renderStickies();renderDumps();renderBlocks();renderPomo();renderNano();document.getElementById('dataModal').classList.remove('open');showHint('cleared')}})
+document.getElementById('clearBtn').addEventListener('click',()=>{if(confirm('delete all data?')){state=defaultState();saveState();renderJournal();renderStickies();renderDumps();renderBlocks();renderPomo();document.getElementById('dataModal').classList.remove('open');showHint('cleared')}})
 // ===== TIMEBLOCKING =====
 function renderBlocks(){const w=document.getElementById('timelineWrap'),l=document.getElementById('dateLabel');document.querySelectorAll('.period-btn').forEach(b=>b.classList.toggle('active',b.dataset.period===blockPeriod));document.getElementById('dateNav').style.display=blockPeriod==='month'?'none':'flex';const bl=state.blocks||[]
 if(blockPeriod==='day'||blockPeriod==='tomorrow'){const dt=blockPeriod==='tomorrow'?addDays(new Date(),1):blockDate;l.textContent=formatDateLabel(dt);renderDayView(w,dt,bl.filter(b=>b.date===dateStr(dt)))}else if(blockPeriod==='3day'){l.textContent='next 3 days';renderMultiDayView(w,3,bl)}else if(blockPeriod==='week'){l.textContent='this week';renderMultiDayView(w,7,bl)}else if(blockPeriod==='month'){renderMonthView(w,bl)}}
@@ -568,63 +513,8 @@ document.getElementById('pomoReset').addEventListener('click',()=>{if(confirm('r
 function startPomoTick(){if(pomoTick)return;renderPomo();pomoTick=setInterval(renderPomo,1000)}
 function stopPomoTick(){if(pomoTick){clearInterval(pomoTick);pomoTick=null}}
 
-// ===== NANO NOTES =====
-let nanoDemoTimer=null,nanoDemoStep=0
-function renderNano(){
-  const list=document.getElementById('nanoList'),q=document.getElementById('nanoSearch').value.toLowerCase().trim();
-  let notes=state.nano||[];
-  if(q)notes=notes.filter(n=>n.text.toLowerCase().includes(q));
-  if(!notes.length){list.innerHTML='<div class="empty-state"><span class="empty-icon">💬</span>tiny notes go here</div>';return}
-  list.innerHTML=notes.slice().reverse().map(n=>{
-    const words=n.text.trim().split(/\s+/);
-    const short=words.slice(0,5).join(' ');
-    const hasMore=words.length>5;
-    return '<div class="nano-item" data-id="'+n.id+'"><span class="nano-text">'+escHtml(short)+'</span>'+(hasMore?'<span class="nano-more">…</span><span class="nano-full">'+escHtml(words.slice(5).join(' '))+'</span>':'')+'<button class="nano-del" data-id="'+n.id+'">✕</button></div>'
-  }).join('');
-  list.querySelectorAll('.nano-item').forEach(el=>{el.addEventListener('click',e=>{if(e.target.closest('.nano-del'))return;el.classList.toggle('expanded')})});
-  list.querySelectorAll('.nano-del').forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();state.nano=state.nano.filter(x=>x.id!==b.dataset.id);saveState();renderNano()}));
-}
-function submitNano(t){
-  const i=document.getElementById('nanoInput');
-  const raw=(t||i.value).trim();
-  if(!raw)return;
-  const words=raw.split(/\s+/);
-  if(words.length>5){showHint('max 5 words');return}
-  state.nano=state.nano||[];
-  state.nano.push({id:uid(),text:raw,timestamp:Date.now()});
-  saveState();if(!t){i.value='';document.getElementById('nanoWc').textContent='0'}renderNano();showHint('nano ✓')
-}
-document.getElementById('nanoSubmit').addEventListener('click',()=>submitNano());
-document.getElementById('nanoInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();submitNano()}});
-document.getElementById('nanoInput').addEventListener('input',function(){
-  const wc=this.value.trim()?this.value.trim().split(/\s+/).length:0;
-  const el=document.getElementById('nanoWc');el.textContent=wc;
-  if(wc>5){el.classList.add('warn');this.style.borderColor='#e74c3c'}else{el.classList.remove('warn');this.style.borderColor=''}
-});
-document.getElementById('nanoSearch').addEventListener('input',()=>renderNano());
-document.getElementById('nanoDemo').addEventListener('click',()=>{
-  const btn=document.getElementById('nanoDemo');
-  if(nanoDemoTimer){clearTimeout(nanoDemoTimer);nanoDemoTimer=null;btn.textContent='▶ demo';btn.classList.remove('playing');state.nano=(state.nano||[]).filter(n=>!n._demo);saveState();renderNano();return}
-  btn.textContent='⏹ stop';btn.classList.add('playing');
-  const demos=[{t:'Morning pages done'},{t:'Walk in park'},{t:'Call doctor'}];nanoDemoStep=0;
-  state.nano=(state.nano||[]).filter(n=>!n._demo);
-  function nextDemo(){
-    if(nanoDemoStep>=demos.length){
-      showHint('demo complete ✓');
-      btn.textContent='▶ replay';btn.classList.remove('playing');nanoDemoTimer=null;
-      return
-    }
-    const d=demos[nanoDemoStep];
-    state.nano.push({id:uid(),text:d.t,_demo:true,timestamp:Date.now()});saveState();renderNano();
-    showHint('➕ '+d.t);
-    nanoDemoStep++;
-    nanoDemoTimer=setTimeout(nextDemo,900);
-  }
-  nextDemo();
-});
-
 // ===== ONBOARDING =====
-const obSteps=[{icon:'🧠',title:'welcome to your journal',desc:'Structure, flexibility, and instant feedback — all in one place.'},{icon:'📝',title:'journal',desc:'Write what you\'re doing as you do it. One entry per activity.'},{icon:'📌',title:'sticky notes',desc:'Pin your thoughts. Drag by the ⋯⋯ handle. Tap 🎨 for colors.'},{icon:'🧠',title:'brain dump',desc:'Unfiltered capture. Type + Enter saves one thought.'},{icon:'⏰',title:'timeblocks',desc:'Schedule on a timeline. Day, 3-Day, Week, or Month view.'},{icon:'🍅',title:'pomodoro timer',desc:'25 work / 5 break. Runs all day automatically.'},{icon:'💬',title:'nano notes',desc:'3-5 words per note. Tap to expand. ▶ demo to try it.'}]
+const obSteps=[{icon:'🧠',title:'welcome to your journal',desc:'Structure, flexibility, and instant feedback — all in one place.'},{icon:'📝',title:'journal',desc:'Write what you\'re doing as you do it. One entry per activity.'},{icon:'📌',title:'sticky notes',desc:'Pin your thoughts. Drag by the ⋯⋯ handle. Tap 🎨 for colors.'},{icon:'🧠',title:'brain dump',desc:'Unfiltered capture. Type + Enter saves one thought.'},{icon:'⏰',title:'timeblocks',desc:'Schedule on a timeline. Day, 3-Day, Week, or Month view.'},{icon:'🍅',title:'pomodoro timer',desc:'25 work / 5 break. Runs all day automatically.'}]
 let obStep=0
 function showOnboarding(){if(state.onboardingDone)return;document.getElementById('onboardOverlay').classList.add('open');renderObStep()}
 function renderObStep(){const s=obSteps[obStep];document.getElementById('obIcon').textContent=s.icon;document.getElementById('obTitle').textContent=s.title;document.getElementById('obDesc').innerHTML=s.desc;document.getElementById('obDots').innerHTML=obSteps.map((_,i)=>'<span class="ob-dot'+(i===obStep?' active':'')+'"></span>').join('');document.getElementById('obNext').textContent=obStep<obSteps.length-1?'next':'start using it'}
@@ -638,7 +528,7 @@ document.getElementById('onboardOverlay').addEventListener('click',e=>{if(e.targ
 applyNight()
 blockPeriod=state.blockPeriod||'day'
 if(blockPeriod==='tomorrow')blockDate=addDays(new Date(),1)
-renderJournal();renderStickies();renderDumps();renderBlocks();renderNano()
+renderJournal();renderStickies();renderDumps();renderBlocks()
 showOnboarding()
 if(currentTab===4)startPomoTick()
 let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(currentTab===1)renderStickies()},300)})
