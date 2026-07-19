@@ -182,15 +182,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .graph-node .gn-handle .gn-port{width:6px;height:6px;border-radius:50%;background:var(--accent);opacity:0;transition:opacity .2s;flex-shrink:0}
 .graph-node:hover .gn-handle .gn-port{opacity:.5}
 .graph-node .gn-title{padding:4px 8px;outline:none;min-height:16px;font-size:12px;font-weight:500;white-space:pre-wrap;word-break:break-word}
-.graph-node .gn-notes-toggle{position:absolute;bottom:2px;right:4px;font-size:10px;cursor:pointer;border:none;background:none;color:var(--muted);opacity:.4;transition:.2s;padding:2px}
+.graph-node .gn-notes-toggle{position:absolute;bottom:2px;right:22px;font-size:10px;cursor:pointer;border:none;background:none;color:var(--muted);opacity:.4;transition:.2s;padding:2px}
 .graph-node .gn-notes-toggle:hover,.graph-node .gn-notes-toggle.open{opacity:1}
+.graph-node .gn-del{position:absolute;top:2px;right:2px;font-size:9px;cursor:pointer;border:none;background:none;color:var(--muted);opacity:0;transition:.2s;padding:2px;line-height:1;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center}
+.graph-node:hover .gn-del{opacity:.6}
+.graph-node .gn-del:hover{opacity:1;background:rgba(0,0,0,.08)}
 .graph-node .gn-notes{display:none;padding:4px 8px 18px;font-size:11px;color:var(--muted);outline:none;white-space:pre-wrap;word-break:break-word;border-top:1px solid var(--border);min-height:20px;line-height:1.5}
 .graph-node .gn-notes.open{display:block}
 .graph-node.dragging{opacity:.85;z-index:999!important}
 
 /* edges drawn on SVG */
-.graph-svg line,.graph-svg path{stroke-width:2;fill:none;stroke-linecap:round;cursor:pointer;transition:stroke-width .15s}
-.graph-svg line:hover,.graph-svg path:hover{stroke-width:3}
+.graph-svg line,.graph-svg path{stroke-width:4;fill:none;stroke-linecap:round;cursor:pointer;transition:stroke-width .15s;stroke-linejoin:round}
+.graph-svg line:hover,.graph-svg path:hover{stroke-width:6;stroke:#fff;mix-blend-mode:difference}
 
 /* context menu */
 .ctx-menu{display:none;position:fixed;background:var(--surface);border:1px solid var(--border);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.15);z-index:500;min-width:130px;padding:4px 0;animation:fadeUp .12s ease}
@@ -567,6 +570,7 @@ if(e.key==='1'){switchTab(0);return}if(e.key==='2'){switchTab(1);return}if(e.key
 if(e.key==='7'){switchTab(6);return}
 if(e.key==='n'||e.key==='N'){if(currentTab===5){addGraphNode(80+Math.random()*120,40+Math.random()*100);showHint('node added');return}}
 if(e.key==='e'||e.key==='E'){if(currentTab===5){graphEdgeMode=!graphEdgeMode;document.getElementById('graphModeGraph').textContent=graphEdgeMode?'🔗 edge: ON':'🌐 graph';showHint(graphEdgeMode?'edge mode: click source then target':'edge mode off');return}}
+if((e.key==='Delete'||e.key==='Backspace')&&currentTab===5){deleteSelected();e.preventDefault();return}
 if(e.key==='Delete'||e.key==='Backspace'){if(currentTab===5&&graphSelected){deleteSelected();return}}
 if(e.key==='Enter'&&!e.shiftKey){if(currentTab===0&&document.activeElement===document.getElementById('journalInput')){e.preventDefault();submitJournal()}if(currentTab===2&&document.activeElement===document.getElementById('dumpInput')){e.preventDefault();submitDump()}if(currentTab===4&&document.activeElement===document.getElementById('pomoNoteInput')){e.preventDefault();submitPomoNote()}}})
 
@@ -820,14 +824,15 @@ function initGraph(){if(!state.graph)state.graph={nodes:[],edges:[],viewMode:'gr
 
 function renderGraph(){initGraph();const layer=document.getElementById('graphNodesLayer'),svg=document.getElementById('graphSvg'),canvas=document.getElementById('graphCanvas')
 svg.innerHTML='';layer.innerHTML='';graphNodeEls={}
-const g=state.graph;if(!g.nodes.length){layer.innerHTML='<div class="empty-state"><span class="empty-icon">🕸️</span>double-tap canvas or press <strong>n</strong> to add a node<br>press <strong>e</strong> for edge mode</div>';return}
+const g=state.graph;if(!g.nodes.length){const c=GRAPH_COLORS;g.nodes.push({id:uid(),text:'Journal',notes:'',x:140,y:20,color:c[0]},{id:uid(),text:'Tasks',notes:'',x:60,y:130,color:c[1]},{id:uid(),text:'Notes',notes:'',x:220,y:130,color:c[2]});g.edges.push({id:uid(),source:g.nodes[0].id,target:g.nodes[1].id,color:c[1]},{id:uid(),source:g.nodes[0].id,target:g.nodes[2].id,color:c[2]});graphSelected=g.nodes[0].id;saveState()}
 g.nodes.forEach(n=>{const el=document.createElement('div');el.className='graph-node'+(graphSelected===n.id?' selected':'')+(n.id===graphConnecting?' connecting':'');el.style.left=n.x+'px';el.style.top=n.y+'px';el.style.borderColor=n.color||'var(--node-border)';el.dataset.id=n.id;graphNodeEls[n.id]=el
-el.innerHTML='<div class="gn-handle"><span class="gn-dots">⋯⋯</span><span class="gn-port"></span></div><div class="gn-title" contenteditable="true">'+escHtml(n.text||'node')+'</div><button class="gn-notes-toggle">📝</button><div class="gn-notes">'+escHtml(n.notes||'')+'</div>'
-el.querySelector('.gn-handle').addEventListener('mousedown',e=>startNodeDrag(e,el,n.id))
-el.querySelector('.gn-handle').addEventListener('touchstart',e=>startNodeDrag(e,el,n.id),{passive:false})
+el.innerHTML='<div class="gn-handle"><span class="gn-dots">⋯⋯</span><span class="gn-port"></span></div><div class="gn-title" contenteditable="true">'+escHtml(n.text||'node')+'</div><button class="gn-notes-toggle">📝</button><button class="gn-del">✕</button><div class="gn-notes">'+escHtml(n.notes||'')+'</div>'
+el.addEventListener('mousedown',e=>startNodeDrag(e,el,n.id))
+el.addEventListener('touchstart',e=>startNodeDrag(e,el,n.id),{passive:false})
 el.querySelector('.gn-title').addEventListener('blur',()=>{nn=state.graph.nodes.find(x=>x.id===n.id);if(nn)nn.text=el.querySelector('.gn-title').textContent.trim()||'node';saveState()})
 el.querySelector('.gn-title').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();el.querySelector('.gn-title').blur()}})
 el.querySelector('.gn-notes-toggle').addEventListener('click',e=>{e.stopPropagation();const ne=el.querySelector('.gn-notes');ne.classList.toggle('open');el.querySelector('.gn-notes-toggle').classList.toggle('open')})
+el.querySelector('.gn-del').addEventListener('click',e=>{e.stopPropagation();deleteNode(n.id)})
 el.querySelector('.gn-notes').addEventListener('blur',()=>{const nn=state.graph.nodes.find(x=>x.id===n.id);if(nn)nn.notes=el.querySelector('.gn-notes').textContent.trim();saveState()})
 el.addEventListener('click',e=>{if(graphEdgeMode||e.ctrlKey||e.metaKey){if(!graphConnecting){graphConnecting=n.id;showHint('now click target node')}else if(graphConnecting!==n.id){addEdge(graphConnecting,n.id);graphConnecting=null;graphEdgeMode=false;document.getElementById('graphModeGraph').textContent='🌐 graph';showHint('edge created!')}else{graphConnecting=null;showHint('cancelled')}return}
 graphSelected=n.id;renderGraph()})
