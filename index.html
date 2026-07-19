@@ -139,6 +139,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .pomo-note .pn-del{border:none;background:none;color:var(--muted);font-size:12px;cursor:pointer;padding:1px;flex-shrink:0}
 .pomo-reset{width:100%;padding:6px;margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);background:none;color:var(--muted);font-size:11px;cursor:pointer}
 
+/* ===== SPRINT BOARD ===== */
+.sprint-nav{display:flex;gap:4px;margin-bottom:8px;align-items:center}
+.sprint-nav button{padding:5px 12px;border:1px solid var(--border);border-radius:14px;background:var(--surface);font-size:11px;cursor:pointer;color:var(--muted)}
+.sprint-nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.sprint-date{font-size:12px;font-weight:500;flex:1;text-align:center}
+.sprint-list{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.sprint-card{background:var(--surface);border-radius:var(--radius);padding:10px 12px;box-shadow:var(--shadow);border-left:4px solid var(--accent);transition:.2s}
+.sprint-card.done{opacity:.5;border-left-color:var(--break)}
+.sprint-card .sc-header{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.sprint-card .sc-handle{cursor:grab;color:var(--muted);font-size:12px;user-select:none;touch-action:none}
+.sprint-card .sc-label{font-size:11px;font-weight:600;color:var(--text)}
+.sprint-card .sc-time{font-size:9px;color:var(--muted);margin-left:auto}
+.sprint-card .sc-done{border:1.5px solid var(--border);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:10px;transition:.2s;flex-shrink:0;background:none;color:transparent}
+.sprint-card .sc-done.checked{background:var(--break);border-color:var(--break);color:#fff}
+.sprint-card .sc-task{width:100%;border:none;outline:none;font-size:13px;font-family:inherit;background:none;padding:4px 0;color:var(--text);resize:none;min-height:32px;line-height:1.5}
+.sprint-card .sc-task::placeholder{color:var(--muted);font-size:12px}
+.sprint-card .sc-del{position:absolute;right:4px;bottom:4px;border:none;background:none;color:var(--muted);font-size:12px;cursor:pointer;opacity:0;transition:.2s;padding:4px}
+.sprint-card:hover .sc-del,.sprint-card .sc-del:focus{opacity:1}
+.sprint-card .sc-actions{display:flex;gap:4px;margin-top:4px;justify-content:flex-end}
+.sprint-card .sc-actions button{padding:3px 8px;border:1px solid var(--border);border-radius:8px;background:none;font-size:9px;cursor:pointer;color:var(--muted)}
+.sprint-search{margin-bottom:8px;width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-family:inherit;outline:none;background:var(--surface);transition:.2s}
+.sprint-search:focus{border-color:var(--accent)}
+.sprint-search::placeholder{color:var(--muted)}
+
 /* ===== GRAPH / NODE EDITOR ===== */
 .graph-bar{display:flex;gap:4px;margin-bottom:6px;flex-wrap:wrap;align-items:center}
 .graph-bar button{flex-shrink:0;padding:4px 10px;border:1px solid var(--border);border-radius:12px;background:var(--surface);font-size:10px;cursor:pointer;transition:.2s;color:var(--muted)}
@@ -323,6 +347,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       </div>
     </div>
 
+    <!-- SPRINT -->
+    <div class="panel" id="panelSprint">
+      <input class="sprint-search" id="sprintSearch" placeholder="🔍 search tasks..." autocomplete="off">
+      <div class="sprint-nav">
+        <button id="sprintPrev">‹</button>
+        <span class="sprint-date" id="sprintDateLabel"></span>
+        <button id="sprintNext">›</button>
+        <button id="sprintToday" class="active">today</button>
+        <button id="sprintTomorrow">tomorrow</button>
+      </div>
+      <div class="sprint-list" id="sprintList"></div>
+    </div>
+
     <div class="panel" id="panelGraph">
       <div class="graph-bar">
         <span class="gb-label">graph</span>
@@ -347,6 +384,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <button class="tab-btn" data-tab="3" data-search="time blocks schedule"><span class="tab-icon">⏰</span>blocks</button>
       <button class="tab-btn" data-tab="4" data-search="pomodoro timer"><span class="tab-icon">🍅</span>timer</button>
       <button class="tab-btn" data-tab="5" data-search="graph node editor map mind"><span class="tab-icon">🕸️</span>graph</button>
+      <button class="tab-btn" data-tab="6" data-search="sprint task timer focus"><span class="tab-icon">🏃</span>sprint</button>
     </div>
   </div>
 </div>
@@ -363,6 +401,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <button class="help-tab" data-page="4">blocks</button>
       <button class="help-tab" data-page="5">timer</button>
       <button class="help-tab" data-page="6">graph</button>
+      <button class="help-tab" data-page="7">sprint</button>
     </div>
     <div class="help-body" id="helpBody">
       <div class="help-page active" data-page="0">
@@ -374,6 +413,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         <div class="hl"><kbd>4</kbd><span>timeblocks</span></div>
         <div class="hl"><kbd>5</kbd><span>pomodoro timer</span></div>
         <div class="hl"><kbd>6</kbd><span>graph editor</span></div>
+        <div class="hl"><kbd>7</kbd><span>sprint board</span></div>
         <div class="hl"><kbd>h</kbd><span>toggle help</span></div>
         <div class="hl"><kbd>n</kbd><span>night mode</span></div>
         <p style="margin-top:8px">💡 tap 💡 for random tips</p>
@@ -393,6 +433,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         <div class="hl"><span>🌳 tree</span><span>auto-layout as tree</span></div>
         <div class="hl"><span>🌐 graph</span><span>free-form placement</span></div>
         <p style="margin-top:8px">Double-tap canvas → new node. Drag node by handle. Edge mode: click source, click target.</p>
+      </div>
+      <div class="help-page" data-page="7">
+        <p>4 sprints per day, max 2 hours each. Assign one task per sprint.</p>
+        <p>Swap tasks between sprints based on your energy. Mark done when complete.</p>
+        <div class="hl"><span>drag ≡ handle</span><span>reorder sprints</span></div>
+        <div class="hl"><span>tap ✓</span><span>mark sprint done</span></div>
+        <div class="hl"><kbd>7</kbd><span>sprint board</span></div>
       </div>
     </div>
     <button class="close-help" id="closeHelp">got it</button>
@@ -471,7 +518,7 @@ const GRAPH_COLORS=['#4a90d9','#e74c3c','#2ecc71','#f39c12','#9b59b6','#1abc9c',
 const START_HOUR=6,END_HOUR=23,HOUR_H=56;const WORK_MIN=25,BREAK_MIN=5
 let blockDate=new Date();let blockPeriod='day';let editingBlockId=null
 
-function defaultState(){return{entries:[],stickies:[],dumps:[],blocks:[],stickySort:'added',blockPeriod:'day',pomo:null,onboardingDone:false,nightMode:false,graph:{nodes:[],edges:[],viewMode:'graph'}}}
+function defaultState(){return{entries:[],stickies:[],dumps:[],blocks:[],sprints:[],stickySort:'added',blockPeriod:'day',pomo:null,onboardingDone:false,nightMode:false,graph:{nodes:[],edges:[],viewMode:'graph'}}}
 function loadState(){try{const r=localStorage.getItem(STORAGE_KEY);if(r){const s=JSON.parse(r);if(s&&typeof s==='object')return{...defaultState(),...s}}}catch(e){}return defaultState()}
 function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state))}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6)}
@@ -492,7 +539,7 @@ document.getElementById('tabSearch').addEventListener('input',function(){const q
 
 // ===== TABS =====
 const tabBtns=document.querySelectorAll('.tab-btn')
-function switchTab(idx){currentTab=idx;document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===idx));tabBtns.forEach((b,i)=>b.classList.toggle('active',i===idx));if(idx===1)renderStickies();if(idx===2)renderDumps();if(idx===3)renderBlocks();if(idx===4){renderPomo();startPomoTick()}else stopPomoTick();if(idx===5)renderGraph()}
+function switchTab(idx){currentTab=idx;document.querySelectorAll('.panel').forEach((p,i)=>p.classList.toggle('active',i===idx));tabBtns.forEach((b,i)=>b.classList.toggle('active',i===idx));if(idx===1)renderStickies();if(idx===2)renderDumps();if(idx===3)renderBlocks();if(idx===4){renderPomo();startPomoTick()}else stopPomoTick();if(idx===5)renderGraph();if(idx===6)renderSprints()}
 tabBtns.forEach(b=>b.addEventListener('click',()=>switchTab(parseInt(b.dataset.tab))))
 
 // ===== GREETING =====
@@ -512,11 +559,12 @@ document.getElementById('dataModal').addEventListener('click',e=>{if(e.target===
 // ===== HINT =====
 let hintTimeout=null
 function showHint(msg){const el=document.getElementById('hintToast');el.textContent=msg;el.classList.add('show');clearTimeout(hintTimeout);hintTimeout=setTimeout(()=>el.classList.remove('show'),3000)}
-document.getElementById('hintBtn').addEventListener('click',()=>{const h=['write what you\'re doing right now','one thought per sticky note','brain dump = uncensored thoughts','drag stickies by the handle','tap timeline to add a time block','pomodoro runs automatically all day','press 1-6 to switch tabs','press h for help','night mode in header','graph: n=new node, e=edge mode','graph: Ctrl+click to connect nodes','export to keep a backup','timer auto-switches work/break'];showHint(h[Math.floor(Math.random()*h.length)])})
+document.getElementById('hintBtn').addEventListener('click',()=>{const h=['write what you\'re doing right now','one thought per sticky note','brain dump = uncensored thoughts','drag stickies by the handle','tap timeline to add a time block','pomodoro runs automatically all day','press 1-6 to switch tabs','press h for help','night mode in header','graph: n=new node, e=edge mode','graph: Ctrl+click to connect nodes','export to keep a backup','timer auto-switches work/break','sprint: 4 blocks of 2 hours per day','sprint: drag ≡ to reorder tasks'];showHint(h[Math.floor(Math.random()*h.length)])})
 
 // ===== KEYBOARD =====
 document.addEventListener('keydown',e=>{if(e.key==='h'||e.key==='H'){document.getElementById('helpOverlay').classList.toggle('open');return}
 if(e.key==='1'){switchTab(0);return}if(e.key==='2'){switchTab(1);return}if(e.key==='3'){switchTab(2);return}if(e.key==='4'){switchTab(3);return}if(e.key==='5'){switchTab(4);return}if(e.key==='6'){switchTab(5);return}
+if(e.key==='7'){switchTab(6);return}
 if(e.key==='n'||e.key==='N'){if(currentTab===5){addGraphNode(80+Math.random()*120,40+Math.random()*100);showHint('node added');return}}
 if(e.key==='e'||e.key==='E'){if(currentTab===5){graphEdgeMode=!graphEdgeMode;document.getElementById('graphModeGraph').textContent=graphEdgeMode?'🔗 edge: ON':'🌐 graph';showHint(graphEdgeMode?'edge mode: click source then target':'edge mode off');return}}
 if(e.key==='Delete'||e.key==='Backspace'){if(currentTab===5&&graphSelected){deleteSelected();return}}
@@ -602,6 +650,169 @@ document.getElementById('pomoNoteInput').addEventListener('keydown',e=>{if(e.key
 document.getElementById('pomoReset').addEventListener('click',()=>{if(confirm('reset?')){state.pomo={phase:'work',startedAt:Date.now(),sessionCount:0,notes:[]};saveState();renderPomo();showHint('timer reset')}})
 function startPomoTick(){if(pomoTick)return;renderPomo();pomoTick=setInterval(renderPomo,1000)}
 function stopPomoTick(){if(pomoTick){clearInterval(pomoTick);pomoTick=null}}
+
+// ===== SPRINT BOARD =====
+const SPRINT_TIMES = [
+  { label: 'Sprint 1', time: '8:00-10:00' },
+  { label: 'Sprint 2', time: '10:00-12:00' },
+  { label: 'Sprint 3', time: '13:00-15:00' },
+  { label: 'Sprint 4', time: '15:00-17:00' },
+];
+let sprintDate = new Date();
+
+function getSprintsForDate(d) {
+  const ds = dateStr(d);
+  let day = (state.sprints || []).find(s => s.date === ds);
+  if (!day) {
+    day = { date: ds, sprints: SPRINT_TIMES.map((st, i) => ({
+      id: uid(), label: st.label, time: st.time, task: '', done: false, order: i
+    }))};
+    state.sprints = state.sprints || [];
+    state.sprints.push(day);
+    saveState();
+  }
+  return day;
+}
+
+function renderSprints() {
+  const list = document.getElementById('sprintList');
+  const day = getSprintsForDate(sprintDate);
+  const searchQ = document.getElementById('sprintSearch').value.toLowerCase().trim();
+  document.getElementById('sprintDateLabel').textContent = formatDateLabel(sprintDate);
+  document.getElementById('sprintToday').classList.toggle('active', dateStr(sprintDate) === dateStr(new Date()));
+  document.getElementById('sprintTomorrow').classList.toggle('active', dateStr(sprintDate) === dateStr(addDays(new Date(),1)));
+
+  let sprints = [...day.sprints].sort((a, b) => a.order - b.order);
+  if (searchQ) sprints = sprints.filter(s => s.task.toLowerCase().includes(searchQ));
+
+  if (!sprints.length) {
+    list.innerHTML = '<div class="empty-state"><span class="empty-icon">🏃</span>no tasks found</div>';
+    return;
+  }
+
+  list.innerHTML = sprints.map(s => `<div class="sprint-card${s.done?' done':''}" data-id="${s.id}">
+    <div class="sc-header">
+      <span class="sc-handle" data-id="${s.id}">≡</span>
+      <span class="sc-label">${s.label}</span>
+      <span class="sc-time">${s.time}</span>
+      <button class="sc-done${s.done?' checked':''}" data-id="${s.id}">${s.done?'✓':''}</button>
+    </div>
+    <textarea class="sc-task" data-id="${s.id}" placeholder="what will you do this sprint?" rows="1">${escHtml(s.task)}</textarea>
+    <div class="sc-actions"><button class="sc-clear" data-id="${s.id}">clear</button></div>
+  </div>`).join('');
+
+  // Task editing
+  list.querySelectorAll('.sc-task').forEach(el => {
+    el.addEventListener('input', function() {
+      this.style.height = 'auto'; this.style.height = Math.min(this.scrollHeight, 80) + 'px';
+      const s = day.sprints.find(x => x.id === this.dataset.id);
+      if (s) { s.task = this.value; saveState(); }
+    });
+    el.addEventListener('blur', function() {
+      const s = day.sprints.find(x => x.id === this.dataset.id);
+      if (s) { s.task = this.value; saveState(); }
+    });
+    // auto-resize
+    el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+  });
+
+  // Done toggle
+  list.querySelectorAll('.sc-done').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = day.sprints.find(x => x.id === btn.dataset.id);
+      if (s) { s.done = !s.done; saveState(); renderSprints(); }
+    });
+  });
+
+  // Clear
+  list.querySelectorAll('.sc-clear').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const s = day.sprints.find(x => x.id === btn.dataset.id);
+      if (s) { s.task = ''; saveState(); renderSprints(); }
+    });
+  });
+
+  // Drag reorder
+  initSprintDrag(day);
+}
+
+function initSprintDrag(day) {
+  let dragEl = null, dragHandle = null, startY = 0, origY = 0, dragOrder = [];
+  const cards = document.querySelectorAll('.sprint-card');
+  
+  cards.forEach(card => {
+    const handle = card.querySelector('.sc-handle');
+    if (!handle) return;
+    
+    handle.addEventListener('mousedown', e => { if (e.button !== 0) return; e.preventDefault(); startSprintDrag(e, card, handle, day); });
+    handle.addEventListener('touchstart', e => { e.preventDefault(); startSprintDrag(e, card, handle, day); }, { passive: false });
+  });
+}
+
+function startSprintDrag(e, card, handle, day) {
+  const rect = card.getBoundingClientRect();
+  const t = e.touches ? e.touches[0] : e;
+  dragHandle = handle; dragEl = card;
+  startY = t.clientY;
+  origY = card.offsetTop;
+  dragEl.classList.add('dragging');
+  
+  const onMove = (ev) => {
+    if (!dragEl) return;
+    ev.preventDefault();
+    const t2 = ev.touches ? ev.touches[0] : ev;
+    const dy = t2.clientY - startY;
+    dragEl.style.transform = `translateY(${dy}px)`;
+    
+    // Check swap targets
+    const allCards = [...document.querySelectorAll('.sprint-card')];
+    const idx = allCards.indexOf(dragEl);
+    const dragRect = dragEl.getBoundingClientRect();
+    const dragMid = dragRect.top + dragRect.height / 2;
+    
+    for (let i = 0; i < allCards.length; i++) {
+      if (allCards[i] === dragEl) continue;
+      const r = allCards[i].getBoundingClientRect();
+      const mid = r.top + r.height / 2;
+      if (Math.abs(dragMid - mid) < 20) {
+        // Swap
+        const dragId = dragEl.dataset.id;
+        const targetId = allCards[i].dataset.id;
+        const dragS = day.sprints.find(x => x.id === dragId);
+        const targetS = day.sprints.find(x => x.id === targetId);
+        if (dragS && targetS) {
+          const tmp = dragS.order;
+          dragS.order = targetS.order;
+          targetS.order = tmp;
+          saveState();
+          renderSprints();
+          return;
+        }
+      }
+    }
+  };
+  
+  const onEnd = () => {
+    if (dragEl) { dragEl.classList.remove('dragging'); dragEl.style.transform = ''; }
+    dragEl = null; dragHandle = null;
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onEnd);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onEnd);
+  };
+  
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('mouseup', onEnd);
+  document.addEventListener('touchmove', onMove, { passive: false });
+  document.addEventListener('touchend', onEnd);
+}
+
+// Sprint date navigation
+document.getElementById('sprintPrev').addEventListener('click', () => { sprintDate = addDays(sprintDate, -1); renderSprints(); });
+document.getElementById('sprintNext').addEventListener('click', () => { sprintDate = addDays(sprintDate, 1); renderSprints(); });
+document.getElementById('sprintToday').addEventListener('click', () => { sprintDate = new Date(); renderSprints(); });
+document.getElementById('sprintTomorrow').addEventListener('click', () => { sprintDate = addDays(new Date(), 1); renderSprints(); });
+document.getElementById('sprintSearch').addEventListener('input', () => renderSprints());
 
 // ===== GRAPH / NODE EDITOR =====
 let graphSelected=null,graphEdgeMode=false,graphConnecting=null,graphCtxTarget=null,graphCtxType=null,graphNodeEls={}
@@ -729,7 +940,7 @@ document.getElementById('ctxAddNode').addEventListener('click',()=>{addGraphNode
 document.getElementById('ctxSample').addEventListener('click',()=>{loadSampleGraph();hideContextMenu()})
 
 // ===== ONBOARDING =====
-const obSteps=[{icon:'🧠',title:'welcome to your journal',desc:'Structure, flexibility, and instant feedback — all in one place.'},{icon:'📝',title:'journal',desc:'Write what you\'re doing as you do it. One entry per activity.'},{icon:'📌',title:'sticky notes',desc:'Pin your thoughts. Drag by the ⋯⋯ handle. Tap 🎨 for colors.'},{icon:'🧠',title:'brain dump',desc:'Unfiltered capture. Type + Enter saves one thought.'},{icon:'⏰',title:'timeblocks',desc:'Schedule on a timeline. Day, 3-Day, Week, or Month view.'},{icon:'🍅',title:'pomodoro timer',desc:'25 work / 5 break. Runs all day automatically.'},{icon:'🕸️',title:'graph editor',desc:'Visual node editor. Press <b>n</b> for node, <b>e</b> for edge mode. Ctrl+click to connect.'}]
+const obSteps=[{icon:'🧠',title:'welcome to your journal',desc:'Structure, flexibility, and instant feedback — all in one place.'},{icon:'📝',title:'journal',desc:'Write what you\'re doing as you do it. One entry per activity.'},{icon:'📌',title:'sticky notes',desc:'Pin your thoughts. Drag by the ⋯⋯ handle. Tap 🎨 for colors.'},{icon:'🧠',title:'brain dump',desc:'Unfiltered capture. Type + Enter saves one thought.'},{icon:'⏰',title:'timeblocks',desc:'Schedule on a timeline. Day, 3-Day, Week, or Month view.'},{icon:'🍅',title:'pomodoro timer',desc:'25 work / 5 break. Runs all day automatically.'},{icon:'🕸️',title:'graph editor',desc:'Visual node editor. Press <b>n</b> for node, <b>e</b> for edge mode. Ctrl+click to connect.'},{icon:'🏃',title:'sprint board',desc:'4 sprints per day. Assign one task per 2-hour block. Swap tasks by dragging.'}]
 let obStep=0
 function showOnboarding(){if(state.onboardingDone)return;document.getElementById('onboardOverlay').classList.add('open');renderObStep()}
 function renderObStep(){const s=obSteps[obStep];document.getElementById('obIcon').textContent=s.icon;document.getElementById('obTitle').textContent=s.title;document.getElementById('obDesc').innerHTML=s.desc;document.getElementById('obDots').innerHTML=obSteps.map((_,i)=>'<span class="ob-dot'+(i===obStep?' active':'')+'"></span>').join('');document.getElementById('obNext').textContent=obStep<obSteps.length-1?'next':'start using it'}
@@ -743,7 +954,7 @@ document.getElementById('onboardOverlay').addEventListener('click',e=>{if(e.targ
 applyNight()
 blockPeriod=state.blockPeriod||'day'
 if(blockPeriod==='tomorrow')blockDate=addDays(new Date(),1)
-renderJournal();renderStickies();renderDumps();renderBlocks();renderGraph()
+renderJournal();renderStickies();renderDumps();renderBlocks();renderGraph();renderSprints()
 showOnboarding()
 if(currentTab===4)startPomoTick()
 let resizeTimer;window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(currentTab===1)renderStickies()},300)})
