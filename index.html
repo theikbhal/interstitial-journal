@@ -48,14 +48,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .empty-state .empty-icon{font-size:48px;margin-bottom:12px;display:block}
 
 /* sticky notes */
-.sticky-canvas{position:relative;min-height:50vh;margin:0 -16px;padding:8px}
-.sticky-note{position:absolute;width:150px;padding:12px 14px 32px;border-radius:6px;font-size:13px;line-height:1.5;word-break:break-word;cursor:grab;touch-action:none;box-shadow:2px 3px 10px rgba(0,0,0,.1);transition:box-shadow .2s;user-select:none}
-.sticky-note.dragging{cursor:grabbing;box-shadow:4px 6px 20px rgba(0,0,0,.15);z-index:999!important}
-.sticky-note .sticky-text{outline:none;min-height:30px;white-space:pre-wrap}
-.sticky-note .sticky-del{position:absolute;bottom:6px;right:8px;border:none;background:rgba(0,0,0,.1);border-radius:50%;width:22px;height:22px;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.4);transition:.2s;line-height:1}
-.sticky-note .sticky-del:active{background:rgba(0,0,0,.2)}
-.sticky-note .sticky-color-btn{position:absolute;bottom:6px;right:34px;border:none;background:rgba(0,0,0,.1);border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:rgba(0,0,0,.4);transition:.2s;line-height:1}
-.sticky-note .sticky-color-btn:active{background:rgba(0,0,0,.2)}
+.sticky-canvas{position:relative;min-height:50vh;margin:0 -16px;padding:8px;user-select:none}
+.sticky-note{position:absolute;width:150px;border-radius:6px;font-size:13px;line-height:1.5;word-break:break-word;touch-action:none;box-shadow:2px 3px 10px rgba(0,0,0,.1);transition:box-shadow .2s;overflow:hidden}
+.sticky-note.dragging{box-shadow:4px 6px 20px rgba(0,0,0,.15);z-index:999!important}
+.sticky-handle{height:22px;display:flex;align-items:center;justify-content:center;cursor:grab;border-bottom:1px solid rgba(0,0,0,.06);flex-shrink:0}
+.sticky-handle::after{content:'⋯⋯';font-size:10px;letter-spacing:2px;color:rgba(0,0,0,.3);line-height:1}
+.sticky-note.dragging .sticky-handle{cursor:grabbing}
+.sticky-text-wrap{padding:8px 10px 28px}
+.sticky-text{outline:none;min-height:24px;white-space:pre-wrap;user-select:text}
+.sticky-actions{position:absolute;bottom:4px;right:4px;display:flex;gap:2px}
+.sticky-del,.sticky-color-btn{border:none;border-radius:50%;width:22px;height:22px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.1);color:rgba(0,0,0,.4);transition:.2s;line-height:1}
+.sticky-del:active,.sticky-color-btn:active{background:rgba(0,0,0,.2)}
+.sticky-edit-hint{position:absolute;top:22px;right:4px;font-size:8px;color:rgba(0,0,0,.2);pointer-events:none;line-height:1}
 .add-sticky-btn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;padding:12px;border:1.5px dashed var(--border);border-radius:var(--radius);background:none;color:var(--muted);font-size:14px;cursor:pointer;transition:.2s;margin-bottom:12px}
 .add-sticky-btn:active{border-color:var(--accent);color:var(--accent)}
 
@@ -162,15 +166,41 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .pomo-reset{width:100%;padding:8px;margin-top:12px;border:1px solid var(--border);border-radius:var(--radius);background:none;color:var(--muted);font-size:12px;cursor:pointer;transition:.2s;text-align:center}
 .pomo-reset:active{background:var(--accent-light)}
 
-/* help overlay */
+/* onboarding */
+.onboard-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:24px}
+.onboard-overlay.open{display:flex}
+.onboard-card{background:var(--surface);border-radius:var(--radius);padding:28px 24px 20px;max-width:320px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.2);animation:fadeUp .3s ease;text-align:center}
+.onboard-card .ob-icon{font-size:48px;display:block;margin-bottom:12px}
+.onboard-card h2{font-size:18px;font-weight:600;margin-bottom:8px}
+.onboard-card p{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:16px}
+.onboard-card .ob-dots{display:flex;justify-content:center;gap:6px;margin-bottom:16px}
+.onboard-card .ob-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:.2s}
+.onboard-card .ob-dot.active{background:var(--accent);width:22px;border-radius:4px}
+.onboard-card .ob-actions{display:flex;flex-direction:column;gap:8px}
+.onboard-card .ob-actions button{padding:10px;border:none;border-radius:20px;font-size:14px;font-weight:500;cursor:pointer;transition:.2s}
+.onboard-card .ob-actions button:active{transform:scale(.97)}
+.onboard-card .ob-actions .ob-next{background:var(--accent);color:#fff}
+.onboard-card .ob-actions .ob-skip{background:none;color:var(--muted);font-size:12px}
+
+/* help overlay + docs */
 .help-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;padding:24px}
 .help-overlay.open{display:flex}
-.help-card{background:var(--surface);border-radius:var(--radius);padding:24px;max-width:340px;width:100%;box-shadow:0 8px 40px rgba(0,0,0,.15);animation:fadeUp .2s ease}
-.help-card h2{font-size:17px;margin-bottom:16px}
-.help-card .shortcut{margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
-.help-card .shortcut kbd{background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:12px;font-family:inherit}
-.help-card .shortcut span{font-size:14px;color:var(--muted)}
-.help-card .close-help{width:100%;padding:10px;margin-top:8px;border:none;background:var(--accent);color:#fff;border-radius:20px;font-size:14px;font-weight:500;cursor:pointer}
+.help-card{background:var(--surface);border-radius:var(--radius);padding:20px;max-width:340px;width:100%;max-height:80vh;display:flex;flex-direction:column;box-shadow:0 8px 40px rgba(0,0,0,.15);animation:fadeUp .2s ease}
+.help-card h2{font-size:17px;margin-bottom:12px;flex-shrink:0}
+.help-tabs{display:flex;gap:4px;margin-bottom:12px;overflow-x:auto;flex-shrink:0;-webkit-overflow-scrolling:touch}
+.help-tabs::-webkit-scrollbar{display:none}
+.help-tab{flex-shrink:0;padding:5px 12px;border:1px solid var(--border);border-radius:14px;background:none;font-size:11px;cursor:pointer;transition:.2s;color:var(--muted);white-space:nowrap}
+.help-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.help-body{flex:1;overflow-y:auto;min-height:0}
+.help-body::-webkit-scrollbar{width:3px}
+.help-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.help-page{display:none;animation:fadeUp .2s ease}
+.help-page.active{display:block}
+.help-page p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:10px}
+.help-page .hl{display:flex;gap:10px;margin-bottom:6px;align-items:center;font-size:12px}
+.help-page .hl kbd{background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:2px 6px;font-size:11px;font-family:inherit;flex-shrink:0}
+.help-page .hl span{color:var(--text)}
+.help-card .close-help{width:100%;padding:10px;margin-top:10px;border:none;background:var(--accent);color:#fff;border-radius:20px;font-size:14px;font-weight:500;cursor:pointer;flex-shrink:0}
 .help-card .close-help:active{opacity:.8}
 
 /* hint toast */
@@ -289,15 +319,73 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 <!-- HELP OVERLAY -->
 <div class="help-overlay" id="helpOverlay">
   <div class="help-card">
-    <h2>shortcuts</h2>
-    <div class="shortcut"><kbd>1</kbd><span>journal</span></div>
-    <div class="shortcut"><kbd>2</kbd><span>sticky notes</span></div>
-    <div class="shortcut"><kbd>3</kbd><span>brain dump</span></div>
-    <div class="shortcut"><kbd>4</kbd><span>timeblocks</span></div>
-    <div class="shortcut"><kbd>5</kbd><span>pomodoro timer</span></div>
-    <div class="shortcut"><kbd>h</kbd><span>toggle help</span></div>
-    <div class="shortcut"><kbd>⏎</kbd><span>submit current input</span></div>
+    <h2>docs & shortcuts</h2>
+    <div class="help-tabs" id="helpTabs">
+      <button class="help-tab active" data-page="0">overview</button>
+      <button class="help-tab" data-page="1">journal</button>
+      <button class="help-tab" data-page="2">stickies</button>
+      <button class="help-tab" data-page="3">dump</button>
+      <button class="help-tab" data-page="4">blocks</button>
+      <button class="help-tab" data-page="5">timer</button>
+    </div>
+    <div class="help-body" id="helpBody">
+      <div class="help-page active" data-page="0">
+        <p>Interstitial journaling helps ADHD brains by giving <strong>structure, flexibility, and instant feedback</strong> — all at once.</p>
+        <p>Write what you're doing as you move through your day. One idea at a time. No pressure.</p>
+        <div class="hl"><kbd>1</kbd><span>journal</span></div>
+        <div class="hl"><kbd>2</kbd><span>sticky notes</span></div>
+        <div class="hl"><kbd>3</kbd><span>brain dump</span></div>
+        <div class="hl"><kbd>4</kbd><span>timeblocks</span></div>
+        <div class="hl"><kbd>5</kbd><span>pomodoro timer</span></div>
+        <div class="hl"><kbd>h</kbd><span>toggle help</span></div>
+        <div class="hl"><kbd>⏎</kbd><span>submit current input</span></div>
+        <p style="margin-top:10px;font-size:11px">💡 tap the 💡 button for random tips</p>
+      </div>
+      <div class="help-page" data-page="1">
+        <p>Log what you're doing <strong>right now</strong>. One entry per activity. Like narrating your day to yourself.</p>
+        <p>Instead of spiraling into distractions, the journal pulls you back to the present moment.</p>
+        <div class="hl"><kbd>Enter</kbd><span>submit entry</span></div>
+        <div class="hl"><kbd>Shift+Enter</kbd><span>new line</span></div>
+      </div>
+      <div class="help-page" data-page="2">
+        <p>Pin your thoughts like real sticky notes. Each note is <strong>one idea</strong>.</p>
+        <p>Drag by the <strong>⋯⋯</strong> handle to move. Tap 🎨 to cycle colors. Sort by added date or color.</p>
+        <div class="hl"><span>⟷ drag handle</span><span>move note</span></div>
+        <div class="hl"><span>🎨 tap</span><span>cycle color</span></div>
+      </div>
+      <div class="help-page" data-page="3">
+        <p>Rapid-fire thought capture. <strong>No filter, no judgment.</strong></p>
+        <p>Type whatever's on your mind and press Enter. Each line is one thought. Come back and clear them later.</p>
+        <div class="hl"><kbd>Enter</kbd><span>add thought</span></div>
+      </div>
+      <div class="help-page" data-page="4">
+        <p>Schedule your day with time blocks. Tap an empty slot to add a block, tap a block to edit it.</p>
+        <p>Switch between <strong>Today, Tomorrow, 3 Days, Week,</strong> and <strong>Month</strong> views.</p>
+        <div class="hl"><span>tap empty space</span><span>add block</span></div>
+        <div class="hl"><span>tap block</span><span>edit / delete</span></div>
+      </div>
+      <div class="help-page" data-page="5">
+        <p>The pomodoro timer runs <strong>automatically</strong> — 25 min work, 5 min break. No start/stop needed.</p>
+        <p>Add notes to track what you're working on during each session. The timer resets daily.</p>
+        <div class="hl"><span>auto-runs</span><span>25 work / 5 break</span></div>
+        <div class="hl"><kbd>Enter</kbd><span>save session note</span></div>
+      </div>
+    </div>
     <button class="close-help" id="closeHelp">got it</button>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="onboard-overlay" id="onboardOverlay">
+  <div class="onboard-card" id="onboardCard">
+    <span class="ob-icon" id="obIcon">🧠</span>
+    <h2 id="obTitle">welcome</h2>
+    <p id="obDesc">your brain's new best friend</p>
+    <div class="ob-dots" id="obDots"></div>
+    <div class="ob-actions">
+      <button class="ob-next" id="obNext">next</button>
+      <button class="ob-skip" id="obSkip">skip tour</button>
+    </div>
   </div>
 </div>
 
@@ -359,6 +447,7 @@ function defaultState() {
     entries: [], stickies: [], dumps: [], blocks: [],
     stickySort: 'added', blockPeriod: 'day',
     pomo: null, // { phase:'work'|'break', startedAt:timestamp, sessionCount:0, notes:[] }
+    onboardingDone: false,
   };
 }
 
@@ -450,6 +539,14 @@ document.getElementById('helpOverlay').addEventListener('click', (e) => {
   if (e.target===document.getElementById('helpOverlay')) {
     document.getElementById('helpOverlay').classList.remove('open');
   }
+});
+// Help tab navigation
+document.querySelectorAll('.help-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.help-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelectorAll('.help-page').forEach(p => p.classList.toggle('active', parseInt(p.dataset.page) === parseInt(tab.dataset.page)));
+  });
 });
 
 // ===== DATA MODAL =====
@@ -572,9 +669,12 @@ function renderStickies() {
   }
   canvas.innerHTML = stickies.map(n =>
     `<div class="sticky-note" data-id="${n.id}" style="left:${n.x}px;top:${n.y}px;z-index:${n.z};background:${n.color}">
-      <div class="sticky-text" contenteditable="true">${escHtml(n.text)}</div>
-      <button class="sticky-color-btn" data-id="${n.id}">🎨</button>
-      <button class="sticky-del" data-id="${n.id}">✕</button>
+      <div class="sticky-handle"></div>
+      <div class="sticky-text-wrap"><div class="sticky-text" contenteditable="true">${escHtml(n.text)}</div></div>
+      <div class="sticky-actions">
+        <button class="sticky-color-btn" data-id="${n.id}">🎨</button>
+        <button class="sticky-del" data-id="${n.id}">✕</button>
+      </div>
     </div>`
   ).join('');
   canvas.querySelectorAll('.sticky-del').forEach(btn => {
@@ -1169,6 +1269,58 @@ function stopPomoTick() {
   if (pomoTick) { clearInterval(pomoTick); pomoTick = null; }
 }
 
+// ===== ONBOARDING =====
+const obSteps = [
+  { icon:'🧠', title:'welcome to your journal', desc:'A space for your ADHD brain. Structure, flexibility, and instant feedback — all in one place.' },
+  { icon:'📝', title:'journal', desc:'Write what you\'re doing as you do it. One entry per activity. Pulls you back to the present.' },
+  { icon:'📌', title:'sticky notes', desc:'Pin your thoughts. Drag by the handle to move. Tap 🎨 to change colors. One idea per note.' },
+  { icon:'🧠', title:'brain dump', desc:'Unfiltered thought capture. Type and press enter. No judgment, no organization needed.' },
+  { icon:'⏰', title:'timeblocks', desc:'Schedule your day on a timeline. Tap to add blocks. View by day, week, or month.' },
+  { icon:'🍅', title:'pomodoro timer', desc:'25 min work, 5 min break. Runs automatically all day. Add notes during each session.' },
+];
+let obStep = 0;
+
+function showOnboarding() {
+  if (state.onboardingDone) return;
+  const overlay = document.getElementById('onboardOverlay');
+  overlay.classList.add('open');
+  renderObStep();
+}
+
+function renderObStep() {
+  const s = obSteps[obStep];
+  document.getElementById('obIcon').textContent = s.icon;
+  document.getElementById('obTitle').textContent = s.title;
+  document.getElementById('obDesc').textContent = s.desc;
+  const dots = document.getElementById('obDots');
+  dots.innerHTML = obSteps.map((_, i) => `<span class="ob-dot${i===obStep?' active':''}"></span>`).join('');
+  document.getElementById('obNext').textContent = obStep < obSteps.length-1 ? 'next' : 'start using it';
+}
+
+function nextObStep() {
+  if (obStep < obSteps.length - 1) {
+    obStep++;
+    renderObStep();
+  } else {
+    document.getElementById('onboardOverlay').classList.remove('open');
+    state.onboardingDone = true;
+    saveState();
+    showHint('💡 tap 💡 for random tips, ⌨️ for help');
+  }
+}
+
+function skipOnboarding() {
+  document.getElementById('onboardOverlay').classList.remove('open');
+  state.onboardingDone = true;
+  saveState();
+}
+
+document.getElementById('obNext').addEventListener('click', nextObStep);
+document.getElementById('obSkip').addEventListener('click', skipOnboarding);
+document.getElementById('onboardOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('onboardOverlay')) skipOnboarding();
+});
+
 // ===== INIT =====
 blockPeriod = state.blockPeriod || 'day';
 if (blockPeriod === 'tomorrow') blockDate = addDays(new Date(), 1);
@@ -1177,6 +1329,9 @@ renderJournal();
 renderStickies();
 renderDumps();
 renderBlocks();
+
+// Onboarding (first visit)
+showOnboarding();
 
 // Pomo auto-starts in background - tick only when tab is active
 if (currentTab === 4) startPomoTick();
